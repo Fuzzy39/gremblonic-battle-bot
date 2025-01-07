@@ -29,6 +29,14 @@
   <ItemGroup>
     <ProjectReference Include="..\CrystalCrash\CrystalCrash.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="SplashText.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\net8.0\" />
+  </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />
