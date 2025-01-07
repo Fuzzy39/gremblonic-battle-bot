@@ -132,7 +132,7 @@ namespace CrystalCore.Util
 
             if (!Reader.Name.Equals(name))
             {
-                throw new MapLoadException("Expected to find element '" + name + "' at " + FormattedReaderPosition + ", but found '" + Reader.Name + "' instead.");
+                throw new XmlException("Expected to find element '" + name + "' at " + FormattedReaderPosition + ", but found '" + Reader.Name + "' instead.");
 
             }
 
@@ -175,7 +175,7 @@ namespace CrystalCore.Util
 
             if (!Enum.TryParse(dir, out d))
             {
-                throw new MapLoadException("Could not parse '" + dir + "' at " + FormattedReaderPosition + " as a direction.");
+                throw new XmlException("Could not parse '" + dir + "' at " + FormattedReaderPosition + " as a direction.");
             }
 
             return d;
