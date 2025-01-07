@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleBot", "BattleBot\Batt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrystalCrash", "CrystalCrash\CrystalCrash.csproj", "{1A8E8DC1-6771-4252-9046-FEEFC04C8BC5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util", "Util\Util.csproj", "{3B5A94E1-207E-4DC4-8A61-E886753A784C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1A8E8DC1-6771-4252-9046-FEEFC04C8BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A8E8DC1-6771-4252-9046-FEEFC04C8BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A8E8DC1-6771-4252-9046-FEEFC04C8BC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B5A94E1-207E-4DC4-8A61-E886753A784C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B5A94E1-207E-4DC4-8A61-E886753A784C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B5A94E1-207E-4DC4-8A61-E886753A784C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B5A94E1-207E-4DC4-8A61-E886753A784C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
