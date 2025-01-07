@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace BattleBot
 {
@@ -45,7 +46,7 @@ namespace BattleBot
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            throw new Exception("You stupid");
             base.Draw(gameTime);
         }
     }
