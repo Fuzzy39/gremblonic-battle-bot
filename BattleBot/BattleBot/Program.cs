@@ -5,7 +5,7 @@ using System;
 
 try
 {
-    using var game = new BattleBot.Game1();
+    using var game = new BattleBot.Main.Game1();
     game.Run();
 
 }

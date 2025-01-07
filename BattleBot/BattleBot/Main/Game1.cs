@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace BattleBot
+namespace BattleBot.Main
 {
     public class Game1 : Game
     {
