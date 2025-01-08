@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Main
+namespace EngineCore
 {
-    internal interface System
+    public interface System
     {
 
-        void update();  
+        void update();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace CrystalCore.Util.Graphics
+namespace Util.Graphics
 {
     public struct RectangleF
     {

@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Main
+namespace BattleBot.Components
 {
-    internal interface Component
+    internal class PixelCoords : EngineCore.Component
     {
-
-        void Destroy();
     }
 }

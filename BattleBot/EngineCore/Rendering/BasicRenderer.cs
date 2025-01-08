@@ -1,10 +1,9 @@
-﻿using CrystalCore.Util.Graphics;
-using CrystalCore.View.Core;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using Util.Graphics;
 
-namespace CrystalCore.View.Rendering
+namespace EngineCore.Rendering
 {
     /// <summary>
     /// A Basic Renderer accomplishes the tasks of a renderer with a spritebatch.

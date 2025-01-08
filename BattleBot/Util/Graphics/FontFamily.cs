@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CrystalCore.Util.Graphics
+namespace Util.Graphics
 {
     /// <summary>
     /// A Font Family is a bunch of spritefonts working together
@@ -22,7 +22,7 @@ namespace CrystalCore.Util.Graphics
 
             this.fonts = new List<SpriteFont>(fonts);
 
-            this.fonts.Sort(new Comparison<SpriteFont>((SpriteFont x, SpriteFont y) =>
+            this.fonts.Sort(new Comparison<SpriteFont>((x, y) =>
             {
                 return x.LineSpacing - y.LineSpacing;
             }));

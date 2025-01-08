@@ -1,18 +1,20 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EngineCore.Rendering;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace BattleBot.Main
 {
-    public class Game1 : Game
+    public class BattleBotGame : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+     
+        private IBatchRenderer renderer;
+        private AssetManager assetManager;
 
-        public Game1()
+        public BattleBotGame()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -20,15 +22,14 @@ namespace BattleBot.Main
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            renderer = new ScaledRenderer(GraphicsDevice);
             base.Initialize();
+            Window.AllowUserResizing = true;
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            assetManager = new(Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -45,8 +46,11 @@ namespace BattleBot.Main
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
-            throw new Exception("You stupid");
+          
+            renderer.Begin();
+            renderer.Draw(assetManager.getTexture(TextureAsset.TestSquare), new Rectangle(0, 0, 200, 200), Color.White);
+            renderer.End();
+
             base.Draw(gameTime);
         }
     }

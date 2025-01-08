@@ -1,12 +1,11 @@
-﻿using CrystalCore.Util.Graphics;
-using CrystalCore.View.Core;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Util.Graphics;
 using static System.MathF;
 
-namespace CrystalCore.View.Rendering
+namespace EngineCore.Rendering
 {
-    public class ScaledRenderer : BasicRenderer, IBatchRenderer
+    public class ScaledRenderer : BasicRenderer
     {
 
         public new Vector2 Size

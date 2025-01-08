@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace CrystalCore.Util
+namespace Util
 {
     public static class MiscUtil
     {
@@ -119,7 +119,7 @@ namespace CrystalCore.Util
 
             if (time.TotalMilliseconds >= 1)
             {
-                return time.Milliseconds + "ms " + ((time.Ticks - (time.Milliseconds * 10 * 1000)) / 10) + "us";
+                return time.Milliseconds + "ms " + (time.Ticks - time.Milliseconds * 10 * 1000) / 10 + "us";
             }
 
             if (time.Ticks != 0)

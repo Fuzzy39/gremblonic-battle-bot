@@ -1,9 +1,9 @@
-﻿using CrystalCore.Util;
-using CrystalCore.Util.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Util;
+using Util.Graphics;
 
-namespace CrystalCore.View.Core
+namespace EngineCore.Rendering
 {
 
 

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Main
+namespace EngineCore
 {
-    internal class Entity
+    public class Entity
     {
 
         private List<Component> components;
@@ -22,7 +22,7 @@ namespace BattleBot.Main
         {
             components.Add(component);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -31,12 +31,12 @@ namespace BattleBot.Main
         public IEnumerable<Component> findComponent(Type type)
         {
             Debug.Assert(type.IsSubclassOf(typeof(Component)));
-            return components.Where( (Component comp) => { return comp.GetType().Equals(type); } );
+            return components.Where((comp) => { return comp.GetType().Equals(type); });
         }
 
         public void Destroy()
         {
-            foreach(Component c in components)
+            foreach (Component c in components)
             {
                 c.Destroy();
             }
