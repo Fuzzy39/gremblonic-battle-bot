@@ -1,4 +1,7 @@
-﻿using EngineCore.Rendering;
+﻿using BattleBot.Components;
+using BattleBot.Systems;
+using EngineCore;
+using EngineCore.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,8 +11,8 @@ namespace BattleBot.Main
 {
     public class BattleBotGame : Game
     {
-     
-        private IBatchRenderer renderer;
+
+        private Engine engine;
         private AssetManager assetManager;
 
         public BattleBotGame()
@@ -21,15 +24,41 @@ namespace BattleBot.Main
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            renderer = new ScaledRenderer(GraphicsDevice);
-            base.Initialize();
             Window.AllowUserResizing = true;
+            engine = new(GraphicsDevice);
+            new PixelRenderingSystem(engine);
+            engine.Initialize();
+
+            
+
+            // that's rather gross.
+
+
+            base.Initialize();
+           
         }
 
         protected override void LoadContent()
         {
             assetManager = new(Content);
+
+            // make an example entity.
+            Entity e = new(engine);
+
+            PixelCoords p = new()
+            {
+                bounds = new Rectangle(100, 100, 200, 200)
+            };
+            e.AddComponent(p);
+
+            SimpleTexture st = new()
+            {
+                texture = assetManager.getTexture(TextureAsset.TestSquare),
+                tint = Color.White
+            };
+            e.AddComponent(st);
+
+            e.StopEditing();
         }
 
         protected override void Update(GameTime gameTime)
@@ -38,7 +67,7 @@ namespace BattleBot.Main
                 Exit();
 
             // TODO: Add your update logic here
-
+            engine.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -46,11 +75,8 @@ namespace BattleBot.Main
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-          
-            renderer.Begin();
-            renderer.Draw(assetManager.getTexture(TextureAsset.TestSquare), new Rectangle(0, 0, 200, 200), Color.White);
-            renderer.End();
 
+            engine.Draw(gameTime);
             base.Draw(gameTime);
         }
     }

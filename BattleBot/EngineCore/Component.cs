@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace EngineCore
 {
-    public interface Component
-    {
-    }
+    public interface Component { }
 }
