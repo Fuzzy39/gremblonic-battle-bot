@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Xml;
 
-namespace CrystalCore.Util
+namespace Util
 {
     /// <summary>
     /// 

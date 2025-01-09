@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Util;
 using static System.MathF;
 
-namespace CrystalCore.Util.Graphics
+namespace Util.Graphics
 {
     public class RotatedRect
     {
@@ -283,7 +284,7 @@ namespace CrystalCore.Util.Graphics
                 // then idk, good luck I guess
 
                 // down
-                < -PI / 2f => new(BoundingLocation.X + (w * Cos(rotation + PI)),
+                < -PI / 2f => new(BoundingLocation.X + w * Cos(rotation + PI),
                                         BoundingLocation.Y + w * Sin(rotation + PI) + h * Cos(rotation + PI)),
 
                 // left
@@ -291,7 +292,7 @@ namespace CrystalCore.Util.Graphics
                            BoundingLocation.Y + w * Sin(-rotation)),
 
                 // up
-                < PI / 2f => new(BoundingLocation.X + h * Sin(rotation),    
+                < PI / 2f => new(BoundingLocation.X + h * Sin(rotation),
                                        BoundingLocation.Y),
 
                 // right

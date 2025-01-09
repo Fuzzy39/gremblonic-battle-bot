@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CrystalCore.View.Core
+namespace EngineCore.Rendering
 {
     public interface IBatchRenderer : IRenderer
     {

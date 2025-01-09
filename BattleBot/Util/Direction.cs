@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace CrystalCore.Util
+namespace Util
 {
     public enum Direction
     {
@@ -73,7 +73,7 @@ namespace CrystalCore.Util
 
         public static bool IsHorizontal(this Direction d)
         {
-            return !IsVertical(d);
+            return !d.IsVertical();
 
         }
 
@@ -317,7 +317,7 @@ namespace CrystalCore.Util
         {
             // by golly, this is wizardry, ain't it?
             // even CompassPoints are Orthagonal, odds are diagonal.
-            return ((int)cp) % 2 != 0;
+            return (int)cp % 2 != 0;
 
         }
 

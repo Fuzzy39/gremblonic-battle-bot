@@ -4,11 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Main
+namespace EngineCore
 {
-    internal interface Component
-    {
-
-        void Destroy();
-    }
+    public interface Component { }
 }
