@@ -21,7 +21,7 @@ namespace EngineCore
 
         public Engine(GraphicsDevice graphics)
         {
-            renderer = new ScaledRenderer(graphics);
+            renderer = new ScaledRenderer(graphics, new(1600, 900), true);
             systems = new List<System>();
             isInitialized = false;
         }

@@ -19,7 +19,9 @@ namespace BattleBot.Main
 
         public BattleBotGame()
         {
-            new GraphicsDeviceManager(this);
+            var graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1600;
+            graphics.PreferredBackBufferHeight = 900;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -27,6 +29,8 @@ namespace BattleBot.Main
         protected override void Initialize()
         {
             Window.AllowUserResizing = true;
+          
+
 
             engine = new(GraphicsDevice);
             new PixelRenderingSystem(engine);
@@ -42,20 +46,14 @@ namespace BattleBot.Main
         protected override void LoadContent()
         {
             assetManager = new(Content);
+            Entity e;
+
+            // background
+            e = MakeSimpleEntity(new Rectangle(0, 0, 1600, 900), TextureAsset.BackgroundDark);
+            e.StopEditing();
 
             // make an example entity.
-            Entity e = new(engine);
-
-            e.AddComponent(new PixelCoords()
-            {
-                bounds = new RotatedRect( new Rectangle(100, 100, 200, 200), 0f, new(200,200))  
-            });
-
-            e.AddComponent(new SimpleTexture()
-            {
-                texture = assetManager.getTexture(TextureAsset.TestSquare),
-                tint = Color.White
-            });
+            e =  MakeSimpleEntity(new Rectangle(100, 100, 200, 200), TextureAsset.TestSquare );
 
             e.AddComponent(new PointRotation()
             {
@@ -67,19 +65,8 @@ namespace BattleBot.Main
 
             e.StopEditing();
 
-
-            e = new(engine);
-
-            e.AddComponent(new PixelCoords()
-            {
-                bounds = new RotatedRect(new Rectangle(100, 100, 100, 500), 1f, new(150, 300))
-            });
-
-            e.AddComponent(new SimpleTexture()
-            {
-                texture = assetManager.getTexture(TextureAsset.TestSquare),
-                tint = Color.White
-            });
+            // make another example entity
+            e = MakeSimpleEntity(new Rectangle(100, 100, 100, 500), TextureAsset.TestSquare);
 
             e.AddComponent(new PointRotation()
             {
@@ -90,6 +77,24 @@ namespace BattleBot.Main
             });
 
             e.StopEditing();
+        }
+
+        // yeah, we're 100% going to need to sort out the entity creating.
+        // the thing with making everything data is that data really doesn't belong in code.
+        private Entity MakeSimpleEntity(Rectangle bounds, TextureAsset text)
+        {
+            Entity toReturn = new(engine);
+            toReturn.AddComponent(new PixelCoords()
+            {
+                bounds = new RotatedRect(bounds, 0f, new(0, 0))
+            });
+
+            toReturn.AddComponent(new SimpleTexture()
+            {
+                texture = assetManager.getTexture(text),
+                tint = Color.White
+            });
+            return toReturn;
         }
 
         protected override void Update(GameTime gameTime)

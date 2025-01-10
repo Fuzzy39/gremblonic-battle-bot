@@ -9,11 +9,11 @@ namespace EngineCore.Rendering
     /// A Basic Renderer accomplishes the tasks of a renderer with a spritebatch.
     /// No bells and whistles. Just adds a layer of abstraction above the spritebatch.
     /// </summary>
-    public class BasicRenderer : IBatchRenderer
+    internal class BasicRenderer : IBatchRenderer
     {
 
-        private GraphicsDevice gd;
-        private SpriteBatch spriteBatch;
+        protected GraphicsDevice gd;
+        protected SpriteBatch spriteBatch;
 
 
         private bool hasDrawntoPrimary = false;
@@ -37,7 +37,7 @@ namespace EngineCore.Rendering
 
         }
 
-        public virtual void Draw(Texture2D texture, RotatedRect destination, Rectangle source, Color color)
+        public void Draw(Texture2D texture, RotatedRect destination, Rectangle source, Color color)
         {
 
 
@@ -60,7 +60,7 @@ namespace EngineCore.Rendering
 
         }
 
-        public virtual void DrawString(FontFamily font, string text, Vector2 position, float height, Color color)
+        public void DrawString(FontFamily font, string text, Vector2 position, float height, Color color)
         {
             font.Draw(spriteBatch, text, height, position, color);
         }
@@ -74,7 +74,7 @@ namespace EngineCore.Rendering
             spriteBatch.Begin();
         }
 
-        public virtual void End()
+        public void End()
         {
             if (hasTarget)
             {
@@ -85,12 +85,12 @@ namespace EngineCore.Rendering
         }
 
 
-        public virtual RenderTarget2D CreateTarget(Point size)
+        public RenderTarget2D CreateTarget(Point size)
         {
             return new RenderTarget2D(gd, size.X, size.Y);
         }
 
-        public virtual void StartTarget(RenderTarget2D target)
+        public void StartTarget(RenderTarget2D target)
         {
 
             if (hasTarget)
@@ -111,7 +111,7 @@ namespace EngineCore.Rendering
         }
 
 
-        public virtual void EndTarget()
+        public void EndTarget()
         {
             if (!hasTarget)
             {

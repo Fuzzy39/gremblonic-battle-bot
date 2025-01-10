@@ -1,132 +1,203 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Util.Graphics;
-using static System.MathF;
 
 namespace EngineCore.Rendering
 {
-    public class ScaledRenderer : BasicRenderer
+    
+
+    internal class ScaledRenderer : IBatchRenderer
     {
 
-        public new Vector2 Size
+        protected GraphicsDevice gd;
+        protected SpriteBatch spriteBatch;
+
+
+        private bool hasDrawntoPrimary = false;
+        private bool hasTarget = false;
+        private bool doLetterboxing = false;
+
+
+        private Point size;
+        private RenderTarget2D virtualWindow;
+
+        public Vector2 Size
         {
-            get { return new Vector2(1600, 900); }
+            get { return size.ToVector2(); }
         }
 
-        private Vector2 WindowSize
+        private Point WindowSize
         {
-            get { return base.Size; }
+            get { return gd.Viewport.Bounds.Size; }
         }
 
-        public ScaledRenderer(GraphicsDevice gd) : base(gd) { }
-
-
-        public override void End()
+        /// <summary>
+        /// The maximum size in real pixels of the renderable frame if the aspect ratio must be maintained.
+        /// </summary>
+        private Rectangle MaxUsableBounds
         {
-            base.End();
+            get
+            {
+                float virtualAspect = Size.X/ Size.Y;
+                float realAspect = WindowSize.X / WindowSize.Y;
+                if (virtualAspect == realAspect) { return new( new(0,0), WindowSize); }
+
+                float X, Y, width, height;
+                if(realAspect > virtualAspect)
+                {
+                    // the real aspect ratio is less tall/ wider than the virtual aspect.
+                    
+                    height = WindowSize.Y;
+                    width = virtualAspect * height;
+                    X = (WindowSize.X - width) / 2.0f;
+                    Y = 0;
+                }
+                else
+                {
+                    width = WindowSize.X;
+                    height = (1/virtualAspect) * width;
+                    Y = (WindowSize.Y - height) / 2.0f;
+                    X = 0;
+                }
+
+                return new RectangleF(X, Y, width, height).toRectangle();
+
+            }
+        }
+
+        /// <summary>
+        /// Whether this ScaledRenderer should maintain it's aspect ratio (given by size) instead of stretching the rendered contents.
+        /// Black bars will be rendered if true to maintain aspect ratio if the window's aspect ratio differs.
+        /// </summary>
+        public bool DoLetterboxing
+        {
+            get { return doLetterboxing; }
+            set {  doLetterboxing = value; }
+        }
+
+
+        public ScaledRenderer(GraphicsDevice gd, Point size, bool doLetterboxing)
+        {
+
+            this.doLetterboxing = doLetterboxing;
+
+            this.gd = gd;
+            spriteBatch = new SpriteBatch(gd);
+
+            this.size = size;
+            virtualWindow = new RenderTarget2D(gd, size.X, size.Y);
+            
+        }
+
+        public virtual void Draw(Texture2D texture, RotatedRect destination, Rectangle source, Color color)
+        {
+
+
+
+
+            spriteBatch.Draw(
+                texture,
+                destination.AsRectangle,
+                source,
+                color,
+                destination.Rotation,
+                new(0),
+                SpriteEffects.None, 0f
+            );
+
+            if (!hasTarget)
+            {
+                hasDrawntoPrimary = true;
+            }
 
         }
 
-        public override void Draw(Texture2D texture, RotatedRect position, Rectangle sourceRect, Color color)
+        public virtual void DrawString(FontFamily font, string text, Vector2 position, float height, Color color)
         {
-            // I somehow have a hunch that this math won't work right the first time...
+            font.Draw(spriteBatch, text, height, position, color);
+        }
+
+        public void Begin()
+        {
+
+         
+            if (hasTarget)
+            {
+                throw new InvalidOperationException("Has a render target.");
+            }
+            gd.SetRenderTarget(virtualWindow);
+            gd.Clear(Color.Black);
+            spriteBatch.Begin();
+        }
+
+        public void End()
+        {
+            if (hasTarget)
+            {
+                throw new InvalidOperationException("Has a render target.");
+            }
+            spriteBatch.End();
+            gd.SetRenderTarget(null);
+
+            // render to the real screen (coward, you won't!)
+            spriteBatch.Begin();
+            Rectangle bounds = doLetterboxing ? MaxUsableBounds : new Rectangle(new(0, 0), WindowSize);
+            spriteBatch.Draw(virtualWindow, bounds, Color.White);
+            spriteBatch.End();
+
+
+            hasDrawntoPrimary = false;
+
+        }
+
+
+        public virtual RenderTarget2D CreateTarget(Point size)
+        {
+            return new RenderTarget2D(gd, size.X, size.Y);
+        }
+
+        public virtual void StartTarget(RenderTarget2D target)
+        {
 
             if (hasTarget)
             {
-                base.Draw(texture, position, sourceRect, color);
-                return;
+                throw new InvalidOperationException("Already has a target");
             }
 
-
-            Vector2 size;
-            float rot = position.Rotation;
-            if (rot < -PI / 2f || rot > 0 && rot <= PI / 2f)
+            if (hasDrawntoPrimary)
             {
-                // when a rectangle is rotated a certain ammount, height and width should be scaled as opposities
-                // this code ought to be a seperate method but whatever.    
-                size = new(position.Height, position.Width);
-                size = ToRealResolution(size);
-
-                // swap components
-                float x, y;
-                size.Deconstruct(out y, out x);
-                size = new(x, y);
-
+                throw new InvalidOperationException("A render target cannot be created after graphics has been drawn to the window.");
             }
-            else
+
+
+            gd.SetRenderTarget(target);
+            spriteBatch.Begin();
+            hasTarget = true;
+
+        }
+
+
+        public virtual void EndTarget()
+        {
+            if (!hasTarget)
             {
-                size = new(position.Width, position.Height);
-                size = ToRealResolution(size);
+                throw new InvalidOperationException("A target has not begun.");
             }
 
 
 
-            RotatedRect real = RotatedRect.FromBoundingLocation
-                (ToRealResolution(position.BoundingBox.Location), size, position.Rotation);
+            spriteBatch.End();
+            gd.SetRenderTarget(null);
+            hasTarget = false;
 
-            base.Draw(texture, real, sourceRect, color);
+
 
         }
-
-
-        public override void DrawString(FontFamily font, string text, Vector2 position, float height, Color color)
-        {
-            if (hasTarget)
-            {
-                base.DrawString(font, text, position, height, color);
-                return;
-            }
-
-            // won't work super well at different aspect ratios but I don't think there's a ton I can do about it.
-            height = ScaleY(height);
-            position = ToRealResolution(position);
-            base.DrawString(font, text, position, height, color);
-        }
-
-
-        // with this, units get screwed up so that when the target is drawn, real pixels are treated as virtual pixels, which means the image is the wrong size on screen.
-        // without, units are correct, but the target's texture is in virtual pixels rather than real ones, which could make the image blurry.
-
-        /*  public override RenderTarget2D CreateTarget(Point size) 
-          {
-
-              return base.CreateTarget(ToRealResolution(size.ToVector2()).ToPoint());
-          }*/
-
-        public Vector2 ToVirtualResolution(Vector2 realRes)
-        {
-
-            realRes.X *= Size.X;
-            realRes.X /= WindowSize.X;
-
-            realRes.Y *= Size.Y;
-            realRes.Y /= WindowSize.Y;
-
-            return realRes;
-
-        }
-
-        private Vector2 ToRealResolution(Vector2 virtRes)
-        {
-            return new(ScaleX(virtRes.X), ScaleY(virtRes.Y));
-        }
-
-        private float ScaleX(float x)
-        {
-            x /= Size.X;
-            x *= WindowSize.X;
-            return x;
-        }
-
-        private float ScaleY(float y)
-        {
-            y /= Size.Y;
-            y *= WindowSize.Y;
-            return y;
-        }
-
-
-
 
     }
 }
