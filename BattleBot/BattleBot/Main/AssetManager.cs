@@ -13,7 +13,8 @@ namespace BattleBot.Main
 
     public enum TextureAsset
     {
-        TestSquare
+        TestSquare,
+        Bot
     }
 
     internal class AssetManager
@@ -26,6 +27,7 @@ namespace BattleBot.Main
         {
             textures = new();
             textures.Add(TextureAsset.TestSquare, content.Load<Texture2D>("TestSquare"));
+            textures.Add(TextureAsset.Bot, content.Load<Texture2D>("Bot"));
         }
 
         public Texture2D getTexture(TextureAsset text)
