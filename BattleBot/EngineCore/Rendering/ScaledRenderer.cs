@@ -44,14 +44,14 @@ namespace EngineCore.Rendering
             get
             {
                 float virtualAspect = Size.X/ Size.Y;
-                float realAspect = WindowSize.X / WindowSize.Y;
+                float realAspect = (float)WindowSize.X / WindowSize.Y;
                 if (virtualAspect == realAspect) { return new( new(0,0), WindowSize); }
 
                 float X, Y, width, height;
-                if(realAspect > virtualAspect)
+                if(realAspect >= virtualAspect)
                 {
                     // the real aspect ratio is less tall/ wider than the virtual aspect.
-                    
+                
                     height = WindowSize.Y;
                     width = virtualAspect * height;
                     X = (WindowSize.X - width) / 2.0f;
