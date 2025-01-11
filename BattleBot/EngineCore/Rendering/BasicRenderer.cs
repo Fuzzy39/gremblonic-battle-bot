@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EngineCore.Util.Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using Util.Graphics;
 
 namespace EngineCore.Rendering
 {
@@ -9,7 +9,7 @@ namespace EngineCore.Rendering
     /// A Basic Renderer accomplishes the tasks of a renderer with a spritebatch.
     /// No bells and whistles. Just adds a layer of abstraction above the spritebatch.
     /// </summary>
-    internal class BasicRenderer : IBatchRenderer
+    internal class BasicRenderer : BatchRenderer
     {
 
         protected GraphicsDevice gd;
@@ -65,7 +65,7 @@ namespace EngineCore.Rendering
             font.Draw(spriteBatch, text, height, position, color);
         }
 
-        void IBatchRenderer.Begin()
+        void BatchRenderer.Begin()
         {
             if (hasTarget)
             {

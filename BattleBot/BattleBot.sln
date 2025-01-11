@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleBot", "BattleBot\Batt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrystalCrash", "CrystalCrash\CrystalCrash.csproj", "{1A8E8DC1-6771-4252-9046-FEEFC04C8BC5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util", "Util\Util.csproj", "{3B5A94E1-207E-4DC4-8A61-E886753A784C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineCore", "EngineCore\EngineCore.csproj", "{96416214-0E92-4F33-8CFC-FC1CF26A9DB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EngineCore", "EngineCore\EngineCore.csproj", "{96416214-0E92-4F33-8CFC-FC1CF26A9DB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +23,6 @@ Global
 		{1A8E8DC1-6771-4252-9046-FEEFC04C8BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A8E8DC1-6771-4252-9046-FEEFC04C8BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A8E8DC1-6771-4252-9046-FEEFC04C8BC5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B5A94E1-207E-4DC4-8A61-E886753A784C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B5A94E1-207E-4DC4-8A61-E886753A784C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B5A94E1-207E-4DC4-8A61-E886753A784C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B5A94E1-207E-4DC4-8A61-E886753A784C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{96416214-0E92-4F33-8CFC-FC1CF26A9DB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{96416214-0E92-4F33-8CFC-FC1CF26A9DB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96416214-0E92-4F33-8CFC-FC1CF26A9DB6}.Release|Any CPU.ActiveCfg = Release|Any CPU

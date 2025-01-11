@@ -2,12 +2,11 @@
 using BattleBot.Systems;
 using EngineCore;
 using EngineCore.Rendering;
+using EngineCore.Util.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using Util;
-using Util.Graphics;
 
 namespace BattleBot.Main
 {
