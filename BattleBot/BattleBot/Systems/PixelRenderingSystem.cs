@@ -13,7 +13,7 @@ namespace BattleBot.Systems
     internal class PixelRenderingSystem : EngineCore.System
     {
 
-        private IRenderer renderer;
+        private Renderer renderer;
 
         public PixelRenderingSystem(Engine e) : base(e)
         {

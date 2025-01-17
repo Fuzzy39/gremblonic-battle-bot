@@ -12,16 +12,16 @@ namespace EngineCore
     public sealed class Engine
     {
 
-        private IBatchRenderer renderer;
+        private BatchRenderer renderer;
         private List<System> systems;
         private bool isInitialized;
         
 
-        public IBatchRenderer Renderer { get { return renderer; } }
+        public BatchRenderer Renderer { get { return renderer; } }
 
         public Engine(GraphicsDevice graphics)
         {
-            renderer = new ScaledRenderer(graphics);
+            renderer = new ScaledRenderer(graphics, new(1600, 900), true);
             systems = new List<System>();
             isInitialized = false;
         }

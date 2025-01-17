@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EngineCore.Rendering
 {
-    public interface IBatchRenderer : IRenderer
+    public interface BatchRenderer : Renderer
     {
 
         public Vector2 Size

@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EngineCore.Util;
+using EngineCore.Util.Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Util;
-using Util.Graphics;
 
 namespace EngineCore.Rendering
 {
@@ -10,7 +10,7 @@ namespace EngineCore.Rendering
     /// <summary>
     /// An IRenderer represents an object that draws textures.
     /// </summary>
-    public interface IRenderer
+    public interface Renderer
     {
 
         /// <summary>

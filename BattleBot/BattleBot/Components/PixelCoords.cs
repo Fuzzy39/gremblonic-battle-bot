@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EngineCore.Util.Graphics;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace BattleBot.Components
 {
     internal class PixelCoords : EngineCore.Component
     {
-        public Rectangle bounds;
+        public RotatedRect bounds;
     }
 }
