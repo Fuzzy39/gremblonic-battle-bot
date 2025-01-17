@@ -2,11 +2,13 @@
 using BattleBot.Systems;
 using EngineCore;
 using EngineCore.Rendering;
+using EngineCore.Util;
 using EngineCore.Util.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BattleBot.Main
 {
@@ -33,6 +35,7 @@ namespace BattleBot.Main
 
             engine = new(GraphicsDevice);
             new PixelRenderingSystem(engine);
+            new CameraRenderingSystem(engine);
             new CircleMovementSystem(engine);
             engine.Initialize();
 
@@ -47,34 +50,66 @@ namespace BattleBot.Main
             assetManager = new(Content);
             Entity e;
 
-            // background
-            e = MakeSimpleEntity(new Rectangle(0, 0, 1600, 900), TextureAsset.BackgroundDark);
+            // camera
+            e = new Entity(engine);
+            e.AddComponent(new PixelBounds()
+            {
+                Bounds = new RotatedRect(new Rectangle(0, 0, 1600, 900), 0f, new(0,0))
+            });
+            e.AddComponent(new SimpleTexture()
+            {
+                Texture = assetManager.getTexture(TextureAsset.BackgroundDark),
+                Tint = Color.White
+            });
+            e.AddComponent(new CameraComponent()
+            {
+                Position = new Vector2(.5f, .5f),
+                Scale = 100f,
+                Rotation = Angle.FromDegrees(0)
+            });
             e.StopEditing();
 
-            // make an example entity.
-            e =  MakeSimpleEntity(new Rectangle(100, 100, 200, 200), TextureAsset.TestSquare );
 
-            e.AddComponent(new PointRotation()
+            e = new Entity(engine);
+            e.AddComponent(new PixelBounds()
             {
-                center = new Point(300, 300),
-                radius = 200,
-                rotationalVelcocity = 1f,
-                otherRotationVelocity = -.4f
+                Bounds = new RotatedRect(new Rectangle(1200, 0, 400, 225), 0f, new(0, 0))
             });
+            e.AddComponent(new SimpleTexture()
+            {
+                Texture = assetManager.getTexture(TextureAsset.BackgroundDark),
+                Tint = Color.White
+            });
+            e.AddComponent(new CameraComponent()
+            {
+                Position = new Vector2(.5f, .5f),
+                Scale = 25f,
+                Rotation = Angle.FromDegrees(0)
+            });
+            e.StopEditing();
 
+
+            // make an example entity.
+            e =  MakeSimpleEntity(new Rectangle(0, 0, 2, 2), TextureAsset.TestSquare );
             e.StopEditing();
 
             // make another example entity
-            e = MakeSimpleEntity(new Rectangle(100, 100, 100, 500), TextureAsset.TestSquare);
+            e = MakeSimpleEntity(new Rectangle(-1, -1, 1, 1), TextureAsset.TestSquare);
+            e.StopEditing();
 
-            e.AddComponent(new PointRotation()
+
+            // make an example entity.
+            e = new Entity(engine);
+            e.AddComponent(new WorldBounds()
             {
-                center = new Point(900, 450),
-                radius = 250,
-                rotationalVelcocity = -1.5f,
-                otherRotationVelocity = 4f
+                Bounds = new RotatedRect(new RectangleF(-.5f, 1f, 1, 2), Angle.FromDegrees(45).Radians, new(.5f, .5f))
             });
-
+            e.AddComponent(new SimpleTexture()
+            {
+                Texture = assetManager.getTexture(TextureAsset.Bot),
+                Tint = Color.White
+            });
+         
             e.StopEditing();
         }
 
@@ -83,15 +118,15 @@ namespace BattleBot.Main
         private Entity MakeSimpleEntity(Rectangle bounds, TextureAsset text)
         {
             Entity toReturn = new(engine);
-            toReturn.AddComponent(new PixelCoords()
+            toReturn.AddComponent(new WorldBounds()
             {
-                bounds = new RotatedRect(bounds, 0f, new(0, 0))
+                Bounds = new RotatedRect(bounds, 0f, new(0, 0))
             });
 
             toReturn.AddComponent(new SimpleTexture()
             {
-                texture = assetManager.getTexture(text),
-                tint = Color.White
+                Texture = assetManager.getTexture(text),
+                Tint = Color.White
             });
             return toReturn;
         }

@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace BattleBot.Components
 {
-    // it is not intended that this component survives
+    /// <summary>
+    /// it is not intended that this component survives.
+    /// If we've got a camera and keyboard input and this is still around, axe it.
+    /// </summary>
     internal class PointRotation : EngineCore.Component
     {
         public Point center = new Point(0,0);

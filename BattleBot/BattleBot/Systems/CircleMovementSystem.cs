@@ -14,23 +14,23 @@ namespace BattleBot.Systems
     {
         public CircleMovementSystem(Engine e) : base(e)
         {
-            addRequiredComponent(typeof(PixelCoords));
-            addRequiredComponent(typeof(PointRotation));
+            AddRequiredComponent(typeof(PixelBounds));
+            AddRequiredComponent(typeof(PointRotation));
             PrimaryComponent = typeof(PointRotation);
-            initialize(e);
+            Initialize(e);
         }
 
-        protected override void draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime)
         {
             // no drawing
         }
 
-        protected override void update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)
         {
             // some updating
             foreach (Entity entity in entities)
             {
-                PixelCoords coords = (PixelCoords)entity.FindComponent<PixelCoords>().First();
+                PixelBounds coords = (PixelBounds)entity.FindComponent<PixelBounds>().First();
                 PointRotation pointRotation = (PointRotation)entity.FindComponent<PointRotation>().First();
 
                 // update rotation
@@ -42,10 +42,10 @@ namespace BattleBot.Systems
                 Vector2 pos = new Vector2(MathF.Cos(pointRotation.theta), MathF.Sin(pointRotation.theta));
                 pos *= pointRotation.radius;
                 pos += pointRotation.center.ToVector2();
-                pos -= (coords.bounds.Center - coords.bounds.BoundingBox.Location);
-                coords.bounds.SetBoundingBoxLocation(pos);
+                pos -= (coords.Bounds.Center - coords.Bounds.BoundingBox.Location);
+                coords.Bounds.SetBoundingBoxLocation(pos);
 
-                coords.bounds.RotateBy((float)gameTime.ElapsedGameTime.TotalSeconds * pointRotation.otherRotationVelocity, new(.5f, .5f));
+                coords.Bounds.RotateBy((float)gameTime.ElapsedGameTime.TotalSeconds * pointRotation.otherRotationVelocity, new(.5f, .5f));
             }
            
         }

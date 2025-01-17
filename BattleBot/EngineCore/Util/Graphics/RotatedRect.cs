@@ -77,6 +77,8 @@ namespace EngineCore.Util.Graphics
             {
                 return PositionOfSizeRelativePoint(0, 0);
             }
+
+            set { SetPositionOfSizeRelativePoint(0, 0, value); }
         }
 
         public Vector2 TopCenter
@@ -86,6 +88,8 @@ namespace EngineCore.Util.Graphics
             {
                 return PositionOfSizeRelativePoint(.5f, 0f);
             }
+
+            set { SetPositionOfSizeRelativePoint(.5f, 0, value); }
         }
 
         public Vector2 TopRight
@@ -94,6 +98,7 @@ namespace EngineCore.Util.Graphics
             {
                 return PositionOfSizeRelativePoint(1f, 0f);
             }
+            set { SetPositionOfSizeRelativePoint(1f, 0, value); }
         }
 
 
@@ -104,6 +109,7 @@ namespace EngineCore.Util.Graphics
             {
                 return PositionOfSizeRelativePoint(0, .5f);
             }
+            set { SetPositionOfSizeRelativePoint(0, .5f, value); }
         }
 
         public Vector2 Center
@@ -112,6 +118,7 @@ namespace EngineCore.Util.Graphics
             {
                 return PositionOfSizeRelativePoint(.5f, .5f);
             }
+            set { SetPositionOfSizeRelativePoint(.5f, .5f, value); }
         }
 
         public Vector2 CenterRight
@@ -120,6 +127,8 @@ namespace EngineCore.Util.Graphics
             {
                 return PositionOfSizeRelativePoint(1, .5f);
             }
+
+            set { SetPositionOfSizeRelativePoint(1, .5f, value); }
         }
 
 
@@ -130,6 +139,8 @@ namespace EngineCore.Util.Graphics
             {
                 return PositionOfSizeRelativePoint(0, 1);
             }
+
+            set { SetPositionOfSizeRelativePoint(0, 1f, value); }
         }
 
         public Vector2 BottomCenter
@@ -138,6 +149,8 @@ namespace EngineCore.Util.Graphics
             {
                 return PositionOfSizeRelativePoint(.5f, 1f);
             }
+
+            set { SetPositionOfSizeRelativePoint(.5f, 1f, value); }
         }
 
 
@@ -148,6 +161,8 @@ namespace EngineCore.Util.Graphics
             {
                 return PositionOfSizeRelativePoint(1f, 1f);
             }
+
+            set { SetPositionOfSizeRelativePoint(1f, 1f, value); }
         }
 
 
@@ -184,6 +199,50 @@ namespace EngineCore.Util.Graphics
 
         }
 
+        /// <summary>
+        /// Returns the position of a point of the RotatedRect's internal reference frame, where its top-left corner is (0,0), and it's bottom right corner is (1,1)
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 ToInternalRepresentation(Vector2 absPos)
+        {
+            Vector2 relPos = absPos - new Vector2(X, Y);
+
+
+            // we are essentially doing a projection of (external rep.) (0,1) and (1,0) onto our top and left edges,
+            // but instead of taking a vector, we're just taking the fraction of length of those vectors. this creates a 
+            // matrix to convert from external to internal rep.
+            Vector2 XVector = TopRight - TopLeft;
+            Vector2 YVector = BottomLeft - TopLeft;
+            Vector2 absXtoInternal = new Vector2(XVector.X/XVector.LengthSquared(), YVector.X/YVector.LengthSquared());
+            Vector2 absYtoInternal = new Vector2(XVector.Y/XVector.LengthSquared(), YVector.Y/YVector.LengthSquared());
+
+             
+
+            // now just take the relPos and convert it!
+            // relpos * [ absXtoInt, absYtoInt ] = Intpos
+            // matrix multiplication, basically
+            float x = absXtoInternal.X * relPos.X + absYtoInternal.X * relPos.X;
+            float y = absXtoInternal.Y * relPos.Y + absYtoInternal.Y*relPos.Y;
+
+            return new Vector2(x, y);
+
+        }
+
+
+        public Vector2 FromInternalRepresentation(Vector2 internalPos)
+        {
+            return PositionOfSizeRelativePoint(internalPos.X, internalPos.Y);   
+        }
+
+
+        private void SetPositionOfSizeRelativePoint(float x, float y, Vector2 newPos)
+        {
+            Vector2 rel = PositionOfSizeRelativePoint(x, y) - new Vector2(X, Y);
+            newPos = newPos - rel;
+            X = newPos.X;
+            Y = newPos.Y;
+        }
+
 
         public void SetBoundingBoxLocation(Vector2 newLoc)
         {
@@ -203,7 +262,7 @@ namespace EngineCore.Util.Graphics
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="location"> the physiscal location of the location origin of this rectangle.</param>
+        /// <param name="location"> the physiscal location of the rotation origin of this rectangle.</param>
         /// <param name="size"> the width and height of this rectangle </param>  
         /// <param name="rotation">the angle, in radians clockwise, that this rectangle is rotated around from rotation origin. </param>
         /// <param name="rotationOrigin">The point on the rectangle that is rotated about, from 0,0 (top left) to 1,1 (bottom right) </param>
@@ -251,6 +310,15 @@ namespace EngineCore.Util.Graphics
         public RotatedRect(Rectangle rect, Direction d) : this(rect, d.ToRadians(), new(.5f))
         {
 
+        }
+
+        public RotatedRect(RotatedRect other)
+        {
+            X = other.X;
+            Y = other.Y;
+            Width = other.Width;
+            Height = other.Height;
+            Rotation = other.Rotation;
         }
 
 
@@ -341,6 +409,37 @@ namespace EngineCore.Util.Graphics
             //Vector2 falseOriginPos = PositionOfSizeRelativePoint(origin.X, origin.Y);
 
             Rotation = MathHelper.WrapAngle(Rotation + radians);
+        }
+
+        public bool Contains(Vector2 point)
+        {
+            RectangleF rectangleF = AsRectangleF;
+
+            float relX = (point.X - X);
+            float relY = (point.Y - Y);
+
+            float x = relX * Cos(Rotation) - relY * Sin(Rotation) + X;
+            float y = relX * Sin(Rotation) + relY * Cos(Rotation) + Y;
+
+            Vector2 toCheck = new(x, y);
+            return rectangleF.Contains(toCheck);
+
+        }
+
+        public bool Intersects(RotatedRect other)
+        {
+            // the goal is to check whether our corners intersect other, then vice versa
+            if (other.Contains(TopLeft)) { return true; }
+            if (other.Contains(BottomRight)) { return true; }
+            if (other.Contains(TopRight)) { return true; }
+            if (other.Contains(BottomLeft)) { return true; }
+
+            if (Contains(other.TopLeft)) { return true; }
+            if (Contains(other.BottomRight)) { return true; }
+            if (Contains(other.TopRight)) { return true; }
+            if (Contains(other.BottomLeft)) { return true; }
+
+            return false;
         }
 
 
