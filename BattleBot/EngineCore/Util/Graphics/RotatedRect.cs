@@ -221,8 +221,8 @@ namespace EngineCore.Util.Graphics
             // now just take the relPos and convert it!
             // relpos * [ absXtoInt, absYtoInt ] = Intpos
             // matrix multiplication, basically
-            float x = absXtoInternal.X * relPos.X + absYtoInternal.X * relPos.X;
-            float y = absXtoInternal.Y * relPos.Y + absYtoInternal.Y*relPos.Y;
+            float x = absXtoInternal.X * relPos.X + absYtoInternal.X * relPos.Y;
+            float y = absXtoInternal.Y * relPos.X + absYtoInternal.Y*relPos.Y;
 
             return new Vector2(x, y);
 

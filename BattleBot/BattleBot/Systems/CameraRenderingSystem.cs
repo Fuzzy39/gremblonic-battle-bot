@@ -58,7 +58,7 @@ namespace BattleBot.Systems
 					RotatedRect toReturn = new RotatedRect (
 						new Vector2(0, 0),
 						PixelBounds.Size / Component.Scale, 
-						Component.Rotation.Radians,
+						-Component.Rotation.Radians,
 						new(.5f, .5f) 
 					);
 
@@ -92,9 +92,11 @@ namespace BattleBot.Systems
 
 
 				RotatedRect RenderBounds = new RotatedRect(new RectangleF(0,0, PixelBounds.Width, PixelBounds.Height), 0, new() );
-	
+
 				// a glorious transformation. Hopefully it works.
-				Vector2 pos = RenderBounds.FromInternalRepresentation(WorldBounds.ToInternalRepresentation(worldBounds.TopLeft));
+				Vector2 internalRep = this.WorldBounds.ToInternalRepresentation(worldBounds.TopLeft);
+				
+                Vector2 pos = RenderBounds.FromInternalRepresentation(internalRep);
 
 				// oh god hopefully this doesn't explode.
 				return new(pos, size, rotation, new());
@@ -148,6 +150,9 @@ namespace BattleBot.Systems
 
         protected override void Draw(GameTime gameTime)
 		{
+
+			//Camera test = new(entities.First());
+			//test.Component.Rotation.Radians += .01f; 
             foreach (Entity camera in entities)
             {
 				Camera cam = new Camera(camera);
@@ -160,7 +165,7 @@ namespace BattleBot.Systems
 		private void RenderCamera(Camera camera)
 		{
 
-		    //camera.Component.Rotation.Radians += .005f;
+		
 
 			// create a target to render to.
 			RenderTarget2D target = camera.Component.RenderTarget;
@@ -176,7 +181,7 @@ namespace BattleBot.Systems
             foreach (Entity toRender in renderables.list)
 			{
 				RotatedRect bounds = ((WorldBounds)toRender.FindComponent<WorldBounds>().First()).Bounds;
-				if (camera.WorldBounds.Intersects(bounds))
+				//if (camera.WorldBounds.Intersects(bounds))
 				{
 					camera.Render(renderer, toRender);
 				}

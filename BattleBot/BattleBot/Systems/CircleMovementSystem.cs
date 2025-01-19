@@ -14,7 +14,7 @@ namespace BattleBot.Systems
     {
         public CircleMovementSystem(Engine e) : base(e)
         {
-            AddRequiredComponent(typeof(PixelBounds));
+            AddRequiredComponent(typeof(WorldBounds));
             AddRequiredComponent(typeof(PointRotation));
             PrimaryComponent = typeof(PointRotation);
             Initialize(e);
@@ -30,13 +30,13 @@ namespace BattleBot.Systems
             // some updating
             foreach (Entity entity in entities)
             {
-                PixelBounds coords = (PixelBounds)entity.FindComponent<PixelBounds>().First();
+                WorldBounds coords = (WorldBounds)entity.FindComponent<WorldBounds>().First();
                 PointRotation pointRotation = (PointRotation)entity.FindComponent<PointRotation>().First();
 
                 // update rotation
                 float radians = (float)gameTime.ElapsedGameTime.TotalSeconds * pointRotation.rotationalVelcocity;
                 //Console.WriteLine(radians);
-                pointRotation.theta += radians;
+                 pointRotation.theta += radians;
 
                 // update entity coords.
                 Vector2 pos = new Vector2(MathF.Cos(pointRotation.theta), MathF.Sin(pointRotation.theta));
