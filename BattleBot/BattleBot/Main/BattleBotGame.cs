@@ -55,7 +55,7 @@ namespace BattleBot.Main
             e = new Entity(engine);
             e.AddComponent(new PixelBounds()
             {
-                Bounds = new RotatedRect(new Rectangle(0, 0, 1600, 900), 0f, new(0,0))
+                Bounds = new RotatedRect(new Rectangle(0, 0, 1600, 900), Angle.FromRadians(0f), new(0,0))
             });
             e.AddComponent(new SimpleTexture()
             {
@@ -65,14 +65,14 @@ namespace BattleBot.Main
             e.AddComponent(new CameraComponent()
             {
                 Position = new Vector2(0f, 0f),
-                Scale = 100f,
+                Scale = 300f,
                 Rotation = Angle.FromDegrees(0)
             });
             e.AddComponent(new CamTestComponent()
             {
-                SecondsToMove = 3f,
-                Amplitude = new(10f, 10f, 100f),
-                Base = new(0,0, 100f),
+                SecondsToMove = 5f,
+                Amplitude = new(10f, 10f, 300f),
+                Base = new(0,0, 300f),
                 Progress = 0f,
                 Stage = CamTestComponent.CamTestStage.X
             });
@@ -82,7 +82,7 @@ namespace BattleBot.Main
             e = new Entity(engine);
             e.AddComponent(new PixelBounds()
             {
-                Bounds = new RotatedRect(new Rectangle(1200, 0, 400, 225), 0f, new(0, 0))
+                Bounds = new RotatedRect(new Rectangle(1200, 0, 400, 225), Angle.FromRadians(0f), new(0, 0))
             });
             e.AddComponent(new SimpleTexture()
             {
@@ -149,7 +149,7 @@ namespace BattleBot.Main
             Entity toReturn = new(engine);
             toReturn.AddComponent(new WorldBounds()
             {
-                Bounds = new RotatedRect(bounds, 0f, new(0, 0))
+                Bounds = new RotatedRect(bounds, Angle.FromRadians(0f), new(0, 0))
             });
 
             toReturn.AddComponent(new SimpleTexture()

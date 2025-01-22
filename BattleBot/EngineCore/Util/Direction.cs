@@ -31,6 +31,11 @@ namespace EngineCore.Util
     public static class DirectionUtil
     {
 
+        public static Direction FromAngle(Angle angle)
+        {
+            return FromRadians(angle.Radians);
+        }
+
         public static Direction FromRadians(float rad)
         {
             rad = MathHelper.WrapAngle(rad);
@@ -144,10 +149,18 @@ namespace EngineCore.Util
             return p;
         }
 
+        public static Angle ToAngle(this Direction d)
+        {
+            return Angle.FromRadians(ToRadians(d));
+        }
+
+
         // What? Radians? really?
         // Yes, really. We do need this.
         // the code contains more trig than you might expect.
         // not like an enormous amount, but I bet you'd expect none.
+       
+
         public static float ToRadians(this Direction d)
         {
 

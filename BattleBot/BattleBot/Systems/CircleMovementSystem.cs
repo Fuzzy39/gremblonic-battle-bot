@@ -1,6 +1,7 @@
 ﻿using BattleBot.Components;
 using EngineCore;
 using EngineCore.Rendering;
+using EngineCore.Util;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ namespace BattleBot.Systems
                 pos -= (coords.Bounds.Center - coords.Bounds.BoundingBox.Location);
                 coords.Bounds.SetBoundingBoxLocation(pos);
 
-                coords.Bounds.RotateBy((float)gameTime.ElapsedGameTime.TotalSeconds * pointRotation.otherRotationVelocity, new(.5f, .5f));
+                coords.Bounds.RotateBy(Angle.FromRadians((float)gameTime.ElapsedGameTime.TotalSeconds * pointRotation.otherRotationVelocity), new(.5f, .5f));
             }
            
         }

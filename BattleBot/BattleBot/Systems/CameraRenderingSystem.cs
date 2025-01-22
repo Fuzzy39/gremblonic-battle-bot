@@ -1,7 +1,7 @@
 ﻿using BattleBot.Components;
 using EngineCore;
 using EngineCore.Rendering;
-using EngineCore.Util.Graphics;
+using EngineCore.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BattleBot.Systems
 {
-	internal class CameraRenderingSystem : EngineCore.System
+    internal class CameraRenderingSystem : EngineCore.System
 	{
 
 		private class CameraRenderable : EngineCore.System
@@ -58,7 +58,7 @@ namespace BattleBot.Systems
 					RotatedRect toReturn = new RotatedRect (
 						new Vector2(0, 0),
 						PixelBounds.Size / Component.Scale, 
-						-Component.Rotation.Radians,
+						-Component.Rotation,
 						new(.5f, .5f) 
 					);
 
@@ -88,10 +88,10 @@ namespace BattleBot.Systems
 			public RotatedRect ToPixelBounds(RotatedRect worldBounds)
 			{
 				Vector2 size = worldBounds.Size * Component.Scale;
-				float rotation = Component.Rotation.Radians + worldBounds.Rotation;
+				Angle rotation = Component.Rotation + worldBounds.Rotation;
 
 
-				RotatedRect RenderBounds = new RotatedRect(new RectangleF(0,0, PixelBounds.Width, PixelBounds.Height), 0, new() );
+				RotatedRect RenderBounds = new RotatedRect(new RectangleF(0,0, PixelBounds.Width, PixelBounds.Height), Angle.FromRadians(0), new() );
 
 				// a glorious transformation. Hopefully it works.
 				Vector2 internalRep = this.WorldBounds.ToInternalRepresentation(worldBounds.TopLeft);

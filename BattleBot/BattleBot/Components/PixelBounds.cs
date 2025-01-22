@@ -1,4 +1,4 @@
-﻿using EngineCore.Util.Graphics;
+﻿using EngineCore.Util;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
