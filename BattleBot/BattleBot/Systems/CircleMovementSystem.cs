@@ -31,8 +31,8 @@ namespace BattleBot.Systems
             // some updating
             foreach (Entity entity in entities)
             {
-                WorldBounds coords = (WorldBounds)entity.FindComponent<WorldBounds>().First();
-                PointRotation pointRotation = (PointRotation)entity.FindComponent<PointRotation>().First();
+                WorldBounds coords = entity.FindComponent<WorldBounds>();
+                PointRotation pointRotation = entity.FindComponent<PointRotation>();
 
                 // update rotation
                 float radians = (float)gameTime.ElapsedGameTime.TotalSeconds * pointRotation.rotationalVelcocity;

@@ -44,8 +44,7 @@ namespace BattleBot.Systems
 			public Camera(Entity e)
 			{
 				entity = e;
-				if(e.FindComponent<CameraComponent>().Count() != 1 ||
-					e.FindComponent<PixelBounds>().Count() != 1)
+				if(! e.HasComponent<CameraComponent>() || !e.HasComponent<PixelBounds>())
 				{
 					throw new ArgumentException("This Entity "+e.ToString()+" Cannot be used as a camera.");
 				}
@@ -72,7 +71,7 @@ namespace BattleBot.Systems
 			{
 				get
 				{
-					return (CameraComponent)entity.FindComponent<CameraComponent>().First();
+					return entity.FindComponent<CameraComponent>();
 				}
 			}
 
@@ -80,7 +79,7 @@ namespace BattleBot.Systems
 			{
 				get 
 				{
-                    return ((PixelBounds)entity.FindComponent<PixelBounds>().First()).Bounds;
+                    return entity.FindComponent<PixelBounds>().Bounds;
                 } 
 			
 			}
@@ -108,10 +107,10 @@ namespace BattleBot.Systems
 			public void Render(Renderer renderer, Entity renderable)
 			{
                 // we must convert world bou
-                RotatedRect renderableWorldBounds = ((WorldBounds)renderable.FindComponent<WorldBounds>().First()).Bounds;
+                RotatedRect renderableWorldBounds = renderable.FindComponent<WorldBounds>().Bounds;
 				RotatedRect spriteBounds = ToPixelBounds(renderableWorldBounds);
-				
-				SimpleTexture st = (SimpleTexture)renderable.FindComponent<SimpleTexture>().First();
+
+				SimpleTexture st = renderable.FindComponent<SimpleTexture>();
 				renderer.Draw(st.Texture, spriteBounds, st.Tint);
             }
 
@@ -180,7 +179,7 @@ namespace BattleBot.Systems
 			// render to it
             foreach (Entity toRender in renderables.list)
 			{
-				RotatedRect bounds = ((WorldBounds)toRender.FindComponent<WorldBounds>().First()).Bounds;
+				RotatedRect bounds = toRender.FindComponent<WorldBounds>().Bounds;
 				//if (camera.WorldBounds.Intersects(bounds))
 				{
 					camera.Render(renderer, toRender);

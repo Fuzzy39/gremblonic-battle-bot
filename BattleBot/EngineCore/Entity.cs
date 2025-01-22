@@ -43,6 +43,11 @@ namespace EngineCore
 
         public void AddComponent(Component component)
         {
+            if(HasComponent(component.GetType()))
+            {
+                throw new InvalidOperationException("Entity: " + this + " Already has a component of type '" + component.GetType().Name+"'.");
+            }
+
             components.Add(component);
             if(!isEditing) engine.OnEntityChanged(this);
         }
@@ -52,36 +57,46 @@ namespace EngineCore
         /// </summary>
         /// <param name="type">Type must be a component</param>
         /// <returns></returns>
-        public IEnumerable<Component> FindComponent<T>() where T : Component 
+        public T? FindComponent<T>() where T : Component 
         {
             // previously a debug assert was here, but given this is part of the engine interfacing with user code, we ought to throw an exception instead.
-            
-            return components.Where((comp) => { return comp is T; });
+
+            IEnumerable<Component> list = components.Where((comp) => { return comp is T; });
+
+            if (list.Count() == 0) return default(T);
+            return (T)list.First();
         }
 
 
         public bool HasComponent<T>() where T: Component
         { 
-            return FindComponent<T>().Count() > 0;
+            return FindComponent<T>() != null;
         }
 
 
-        internal IEnumerable<Component> FindComponent(Type component)
+        internal Component? FindComponent(Type component)
         {
 
             Debug.Assert(component.IsAssignableTo(typeof(Component)));
 
-            return components.Where((comp) => { return comp.GetType().IsAssignableTo(component); });
+            IEnumerable<Component> list = components.Where((comp) => { return comp.GetType().IsAssignableTo(component); });
+
+            if (list.Count() == 0) return null;
+            return list.First();
         }
 
 
         internal bool HasComponent(Type component)
         {
-            return FindComponent(component).Count() > 0;
+            return FindComponent(component) != null;
         }
 
         public override string ToString()
         {
+            if(components.Count == 0)
+            {
+                return "{}";
+            }
             string toReturn = "{";
             foreach (Component component in components)
             {
