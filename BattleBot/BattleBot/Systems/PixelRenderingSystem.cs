@@ -27,8 +27,8 @@ namespace BattleBot.Systems
         {
             foreach(Entity entity in entities)
             {
-                PixelBounds coords = (PixelBounds)entity.FindComponent<PixelBounds>().First();
-                SimpleTexture texture = (SimpleTexture)entity.FindComponent<SimpleTexture>().First();
+                PixelBounds coords = entity.FindComponent<PixelBounds>();
+                SimpleTexture texture = entity.FindComponent<SimpleTexture>();
                 renderer.Draw(texture.Texture, coords.Bounds, texture.Tint);
             }
         }

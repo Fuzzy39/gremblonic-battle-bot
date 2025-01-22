@@ -1,4 +1,5 @@
-﻿using EngineCore.Util.Graphics;
+﻿using EngineCore.Util;
+using EngineCore.Util.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -105,7 +106,7 @@ namespace EngineCore.Rendering
                 destination.AsRectangle,
                 source,
                 color,
-                destination.Rotation,
+                destination.Rotation.Radians,
                 new(0),
                 SpriteEffects.None, 0f
             );

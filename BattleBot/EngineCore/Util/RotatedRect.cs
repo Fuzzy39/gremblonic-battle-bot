@@ -1,8 +1,7 @@
-﻿using EngineCore.Util;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using static System.MathF;
 
-namespace EngineCore.Util.Graphics
+namespace EngineCore.Util
 {
     public class RotatedRect
     {
@@ -22,7 +21,7 @@ namespace EngineCore.Util.Graphics
         ///  The clockwise Rotation in radians, about the top left corner
         ///  Should be between -pi and pi.
         /// </summary>
-        public float Rotation { get; private set; }
+        public Angle Rotation { get; private set; }
 
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace EngineCore.Util.Graphics
             get
             {
 
-                if (DirectionUtil.FromRadians(Rotation).IsHorizontal())
+                if (DirectionUtil.FromAngle(Rotation).IsHorizontal())
                 {
                     return new(Height, Width);
                 }
@@ -192,8 +191,8 @@ namespace EngineCore.Util.Graphics
             float OwnY = y * Height;
 
             // do a bit of trig
-            float realX = Cos(-Rotation) * OwnX + Sin(-Rotation) * OwnY;
-            float realY = Sin(Rotation) * OwnX + Cos(Rotation) * OwnY;
+            float realX = Cos(-Rotation.Radians) * OwnX + Sin(-Rotation.Radians) * OwnY;
+            float realY = Sin(Rotation.Radians) * OwnX + Cos(Rotation.Radians) * OwnY;
 
             return new Vector2(realX + X, realY + Y);
 
@@ -213,16 +212,16 @@ namespace EngineCore.Util.Graphics
             // matrix to convert from external to internal rep.
             Vector2 XVector = TopRight - TopLeft;
             Vector2 YVector = BottomLeft - TopLeft;
-            Vector2 absXtoInternal = new Vector2(XVector.X/XVector.LengthSquared(), YVector.X/YVector.LengthSquared());
-            Vector2 absYtoInternal = new Vector2(XVector.Y/XVector.LengthSquared(), YVector.Y/YVector.LengthSquared());
+            Vector2 absXtoInternal = new Vector2(XVector.X / XVector.LengthSquared(), YVector.X / YVector.LengthSquared());
+            Vector2 absYtoInternal = new Vector2(XVector.Y / XVector.LengthSquared(), YVector.Y / YVector.LengthSquared());
 
-             
+
 
             // now just take the relPos and convert it!
             // relpos * [ absXtoInt, absYtoInt ] = Intpos
             // matrix multiplication, basically
             float x = absXtoInternal.X * relPos.X + absYtoInternal.X * relPos.Y;
-            float y = absXtoInternal.Y * relPos.X + absYtoInternal.Y*relPos.Y;
+            float y = absXtoInternal.Y * relPos.X + absYtoInternal.Y * relPos.Y;
 
             return new Vector2(x, y);
 
@@ -231,7 +230,7 @@ namespace EngineCore.Util.Graphics
 
         public Vector2 FromInternalRepresentation(Vector2 internalPos)
         {
-            return PositionOfSizeRelativePoint(internalPos.X, internalPos.Y);   
+            return PositionOfSizeRelativePoint(internalPos.X, internalPos.Y);
         }
 
 
@@ -266,10 +265,10 @@ namespace EngineCore.Util.Graphics
         /// <param name="size"> the width and height of this rectangle </param>  
         /// <param name="rotation">the angle, in radians clockwise, that this rectangle is rotated around from rotation origin. </param>
         /// <param name="rotationOrigin">The point on the rectangle that is rotated about, from 0,0 (top left) to 1,1 (bottom right) </param>
-        public RotatedRect(Vector2 location, Vector2 size, float rotation, Vector2 rotationOrigin)
+        public RotatedRect(Vector2 location, Vector2 size, Angle rotation, Vector2 rotationOrigin)
         {
 
-            Rotation = MathHelper.WrapAngle(rotation);
+            Rotation = rotation;
 
             Width = size.X;
 
@@ -283,7 +282,7 @@ namespace EngineCore.Util.Graphics
 
             float OriginLocationDist = rotationOrigin.Length();
 
-            float deltaTheta = Atan(rotationOrigin.Y / rotationOrigin.X) + Rotation;
+            float deltaTheta = Atan(rotationOrigin.Y / rotationOrigin.X) + Rotation.Radians;
             if (float.IsNaN(deltaTheta))
             {
                 deltaTheta = 0; // shouldn't matter because originlocdist = 0
@@ -294,20 +293,20 @@ namespace EngineCore.Util.Graphics
 
         }
 
-        public RotatedRect(RectangleF rect, float rotation, Vector2 origin) : this(rect.Location, rect.Size, rotation, origin)
+        public RotatedRect(RectangleF rect, Angle rotation, Vector2 origin) : this(rect.Location, rect.Size, rotation, origin)
         {
         }
 
-        public RotatedRect(Rectangle rect, float rotation, Vector2 origin) : this(new RectangleF(rect), rotation, origin)
+        public RotatedRect(Rectangle rect, Angle rotation, Vector2 origin) : this(new RectangleF(rect), rotation, origin)
         {
         }
 
-        public RotatedRect(RectangleF rect, Direction d) : this(rect, d.ToRadians(), new(.5f))
+        public RotatedRect(RectangleF rect, Direction d) : this(rect, d.ToAngle(), new(.5f))
         {
 
         }
 
-        public RotatedRect(Rectangle rect, Direction d) : this(rect, d.ToRadians(), new(.5f))
+        public RotatedRect(Rectangle rect, Direction d) : this(rect, d.ToAngle(), new(.5f))
         {
 
         }
@@ -332,16 +331,16 @@ namespace EngineCore.Util.Graphics
         /// <param name="size">Size of interior rectangle</param>
         /// <param name="rotation"></param>
         /// <returns></returns>
-        public static RotatedRect FromBoundingLocation(Vector2 BoundingLocation, Vector2 size, float rotation)
+        public static RotatedRect FromBoundingLocation(Vector2 BoundingLocation, Vector2 size, Angle rotation)
         {
 
-            rotation = MathHelper.WrapAngle(rotation);
+           
 
             float w = size.X;
             float h = size.Y;
 
 
-            Vector2 loc = rotation switch
+            Vector2 loc = rotation.Radians switch
             {
 
                 // How does this math work?
@@ -352,28 +351,28 @@ namespace EngineCore.Util.Graphics
                 // then idk, good luck I guess
 
                 // down
-                < -PI / 2f => new(BoundingLocation.X + w * Cos(rotation + PI),
-                                        BoundingLocation.Y + w * Sin(rotation + PI) + h * Cos(rotation + PI)),
+                < -PI / 2f => new(BoundingLocation.X + w * Cos(rotation.Radians + PI),
+                                        BoundingLocation.Y + w * Sin(rotation.Radians + PI) + h * Cos(rotation.Radians + PI)),
 
                 // left
                 < 0 => new(BoundingLocation.X,
-                           BoundingLocation.Y + w * Sin(-rotation)),
+                           BoundingLocation.Y + w * Sin(-rotation.Radians)),
 
                 // up
-                < PI / 2f => new(BoundingLocation.X + h * Sin(rotation),
+                < PI / 2f => new(BoundingLocation.X + h * Sin(rotation.Radians),
                                        BoundingLocation.Y),
 
                 // right
-                _ => new(BoundingLocation.X + w * Cos(PI - rotation) + h * Sin(PI - rotation),
-                         BoundingLocation.Y + h * Cos(PI - rotation)),
+                _ => new(BoundingLocation.X + w * Cos(PI - rotation.Radians) + h * Sin(PI - rotation.Radians),
+                         BoundingLocation.Y + h * Cos(PI - rotation.Radians)),
             };
 
-            RotatedRect toReturn = new RotatedRect(loc, size, 0f, new(0));
+            RotatedRect toReturn = new RotatedRect(loc, size, Angle.FromDegrees(0), new(0));
             toReturn.Rotation = rotation;
             return toReturn;
         }
 
-        public static RotatedRect FromBoundingLocation(Point BoundingLocation, Point size, float rotation)
+        public static RotatedRect FromBoundingLocation(Point BoundingLocation, Point size, Angle rotation)
         {
             return FromBoundingLocation(BoundingLocation.ToVector2(), size.ToVector2(), rotation);
         }
@@ -384,22 +383,22 @@ namespace EngineCore.Util.Graphics
         /// </summary>
         /// <param name="radians"></param>
         /// <param name="origin">the relative origin of rotation, where (0,0) is the position of the rectangle and (1,1) is the furthest corner.</param>
-        public void RotateBy(float radians, Vector2 origin)
+        public void RotateBy(Angle angle, Vector2 origin)
         {
             // step 1 find actual origin
             Vector2 originPos = PositionOfSizeRelativePoint(origin.X, origin.Y);
 
-            RotateAbout(radians, originPos);
+            RotateAbout(angle, originPos);
         }
 
-        public void RotateAbout(float radians, Vector2 AbsoluteOrigin)
+        public void RotateAbout(Angle angle, Vector2 AbsoluteOrigin)
         {
 
             // step 2 rotate position
             X -= AbsoluteOrigin.X;
             Y -= AbsoluteOrigin.Y;
-            float newX = X * Cos(radians) - Y * Sin(radians);
-            float newY = Y * Cos(radians) + X * Sin(radians);
+            float newX = X * Cos(angle.Radians) - Y * Sin(angle.Radians);
+            float newY = Y * Cos(angle.Radians) + X * Sin(angle.Radians);
             X = newX + AbsoluteOrigin.X;
             Y = newY + AbsoluteOrigin.Y;
 
@@ -408,18 +407,18 @@ namespace EngineCore.Util.Graphics
             // we measure the angle between our position, the origin and what we think is the origin to find our missing angle
             //Vector2 falseOriginPos = PositionOfSizeRelativePoint(origin.X, origin.Y);
 
-            Rotation = MathHelper.WrapAngle(Rotation + radians);
+            Rotation += angle;
         }
 
         public bool Contains(Vector2 point)
         {
             RectangleF rectangleF = AsRectangleF;
 
-            float relX = (point.X - X);
-            float relY = (point.Y - Y);
+            float relX = point.X - X;
+            float relY = point.Y - Y;
 
-            float x = relX * Cos(Rotation) - relY * Sin(Rotation) + X;
-            float y = relX * Sin(Rotation) + relY * Cos(Rotation) + Y;
+            float x = relX * Cos(Rotation.Radians) - relY * Sin(Rotation.Radians) + X;
+            float y = relX * Sin(Rotation.Radians) + relY * Cos(Rotation.Radians) + Y;
 
             Vector2 toCheck = new(x, y);
             return rectangleF.Contains(toCheck);

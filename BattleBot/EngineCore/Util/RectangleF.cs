@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace EngineCore.Util.Graphics
+namespace EngineCore.Util
 {
     public struct RectangleF
     {

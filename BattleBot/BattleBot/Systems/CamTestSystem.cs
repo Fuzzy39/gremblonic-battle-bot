@@ -32,8 +32,8 @@ namespace BattleBot.Systems
             // some updating
             foreach (Entity entity in entities)
             {
-                CameraComponent cam = (CameraComponent)entity.FindComponent<CameraComponent>().First();
-                CamTestComponent testState = (CamTestComponent)entity.FindComponent<CamTestComponent>().First();
+                CameraComponent cam = entity.FindComponent<CameraComponent>();
+                CamTestComponent testState = entity.FindComponent<CamTestComponent>();
 
                 // update progress
                 if (testState.Progress == 1)

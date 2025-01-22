@@ -1,7 +1,7 @@
 ﻿using BattleBot.Components;
 using EngineCore;
 using EngineCore.Rendering;
-using EngineCore.Util.Graphics;
+using EngineCore.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BattleBot.Systems
 {
-	internal class CameraRenderingSystem : EngineCore.System
+    internal class CameraRenderingSystem : EngineCore.System
 	{
 
 		private class CameraRenderable : EngineCore.System
@@ -44,8 +44,7 @@ namespace BattleBot.Systems
 			public Camera(Entity e)
 			{
 				entity = e;
-				if(e.FindComponent<CameraComponent>().Count() != 1 ||
-					e.FindComponent<PixelBounds>().Count() != 1)
+				if(! e.HasComponent<CameraComponent>() || !e.HasComponent<PixelBounds>())
 				{
 					throw new ArgumentException("This Entity "+e.ToString()+" Cannot be used as a camera.");
 				}
@@ -58,7 +57,7 @@ namespace BattleBot.Systems
 					RotatedRect toReturn = new RotatedRect (
 						new Vector2(0, 0),
 						PixelBounds.Size / Component.Scale, 
-						-Component.Rotation.Radians,
+						-Component.Rotation,
 						new(.5f, .5f) 
 					);
 
@@ -72,7 +71,7 @@ namespace BattleBot.Systems
 			{
 				get
 				{
-					return (CameraComponent)entity.FindComponent<CameraComponent>().First();
+					return entity.FindComponent<CameraComponent>();
 				}
 			}
 
@@ -80,7 +79,7 @@ namespace BattleBot.Systems
 			{
 				get 
 				{
-                    return ((PixelBounds)entity.FindComponent<PixelBounds>().First()).Bounds;
+                    return entity.FindComponent<PixelBounds>().Bounds;
                 } 
 			
 			}
@@ -88,10 +87,10 @@ namespace BattleBot.Systems
 			public RotatedRect ToPixelBounds(RotatedRect worldBounds)
 			{
 				Vector2 size = worldBounds.Size * Component.Scale;
-				float rotation = Component.Rotation.Radians + worldBounds.Rotation;
+				Angle rotation = Component.Rotation + worldBounds.Rotation;
 
 
-				RotatedRect RenderBounds = new RotatedRect(new RectangleF(0,0, PixelBounds.Width, PixelBounds.Height), 0, new() );
+				RotatedRect RenderBounds = new RotatedRect(new RectangleF(0,0, PixelBounds.Width, PixelBounds.Height), Angle.FromRadians(0), new() );
 
 				// a glorious transformation. Hopefully it works.
 				Vector2 internalRep = this.WorldBounds.ToInternalRepresentation(worldBounds.TopLeft);
@@ -108,10 +107,10 @@ namespace BattleBot.Systems
 			public void Render(Renderer renderer, Entity renderable)
 			{
                 // we must convert world bou
-                RotatedRect renderableWorldBounds = ((WorldBounds)renderable.FindComponent<WorldBounds>().First()).Bounds;
+                RotatedRect renderableWorldBounds = renderable.FindComponent<WorldBounds>().Bounds;
 				RotatedRect spriteBounds = ToPixelBounds(renderableWorldBounds);
-				
-				SimpleTexture st = (SimpleTexture)renderable.FindComponent<SimpleTexture>().First();
+
+				SimpleTexture st = renderable.FindComponent<SimpleTexture>();
 				renderer.Draw(st.Texture, spriteBounds, st.Tint);
             }
 
@@ -180,7 +179,7 @@ namespace BattleBot.Systems
 			// render to it
             foreach (Entity toRender in renderables.list)
 			{
-				RotatedRect bounds = ((WorldBounds)toRender.FindComponent<WorldBounds>().First()).Bounds;
+				RotatedRect bounds = toRender.FindComponent<WorldBounds>().Bounds;
 				//if (camera.WorldBounds.Intersects(bounds))
 				{
 					camera.Render(renderer, toRender);
