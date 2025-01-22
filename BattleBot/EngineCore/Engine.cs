@@ -48,7 +48,7 @@ namespace EngineCore
             }
         }
 
-        internal void OnSystemCreated(System system)
+        public void OnSystemCreated(System system)
         {
             if(isInitialized)
             {
