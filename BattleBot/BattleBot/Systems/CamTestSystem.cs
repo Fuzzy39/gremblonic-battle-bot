@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BattleBot.Systems
 {
-    internal class CamTestSystem : EngineCore.System
+    internal class CamTestSystem : EngineCore.BasicSystem
     {
         public CamTestSystem(Engine e) : base(e)
         {
@@ -22,12 +22,8 @@ namespace BattleBot.Systems
             Initialize(e);
         }
 
-        protected override void Draw(GameTime gameTime)
-        {
-            // no drawing
-        }
 
-        protected override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             // some updating
             foreach (Entity entity in entities)

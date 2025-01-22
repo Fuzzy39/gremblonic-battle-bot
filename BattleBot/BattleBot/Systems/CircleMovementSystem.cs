@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BattleBot.Systems
 {
-    internal class CircleMovementSystem : EngineCore.System
+    internal class CircleMovementSystem : EngineCore.BasicSystem
     {
         public CircleMovementSystem(Engine e) : base(e)
         {
@@ -21,12 +21,7 @@ namespace BattleBot.Systems
             Initialize(e);
         }
 
-        protected override void Draw(GameTime gameTime)
-        {
-            // no drawing
-        }
-
-        protected override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             // some updating
             foreach (Entity entity in entities)

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace BattleBot.Systems
 {
-    internal class InputSystem : EngineCore.System
+    internal class InputSystem : EngineCore.BasicSystem
     {
         public InputSystem(Engine e) : base(e)
         {
@@ -16,16 +16,11 @@ namespace BattleBot.Systems
             Initialize(e);
         }
 
-        protected override void Draw(GameTime gameTime)
-        {
-            //No draw (angy face)
-        }
-
-        protected override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             foreach (Entity entity in entities)
             {
-                InputComponent input = (InputComponent)entity.FindComponent<InputComponent>();
+                InputComponent input = entity.FindComponent<InputComponent>();
                 if (Keyboard.GetState().IsKeyDown(input.key))
                 {
                     input.action.Invoke();

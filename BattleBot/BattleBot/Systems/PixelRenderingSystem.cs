@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BattleBot.Systems
 {
-    internal class PixelRenderingSystem : EngineCore.System
+    internal class PixelRenderingSystem : EngineCore.BasicSystem
     {
 
         private Renderer renderer;
@@ -23,19 +23,14 @@ namespace BattleBot.Systems
             Initialize(e);
         }
 
-        protected override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
-            foreach(Entity entity in entities)
+            foreach (Entity entity in entities)
             {
                 PixelBounds coords = entity.FindComponent<PixelBounds>();
                 SimpleTexture texture = entity.FindComponent<SimpleTexture>();
                 renderer.Draw(texture.Texture, coords.Bounds, texture.Tint);
             }
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-           // no update.
         }
     }
 }

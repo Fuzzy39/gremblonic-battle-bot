@@ -67,14 +67,14 @@ namespace BattleBot.Main
             e.AddComponent(new CameraComponent()
             {
                 Position = new Vector2(0f, 0f),
-                Scale = 300f,
+                Scale = 200f,
                 Rotation = Angle.FromDegrees(0)
             });
             e.AddComponent(new CamTestComponent()
             {
                 SecondsToMove = 5f,
                 Amplitude = new(10f, 10f, 300f),
-                Base = new(0,0, 300f),
+                Base = new(0,0, 200f),
                 Progress = 0f,
                 Stage = CamTestComponent.CamTestStage.X
             });

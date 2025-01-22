@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 
 namespace BattleBot.Systems
 {
-    internal class CameraRenderingSystem : EngineCore.System
+    internal class CameraRenderingSystem : EngineCore.BasicSystem
 	{
 
-		private class CameraRenderable : EngineCore.System
+		private class CameraRenderable : EngineCore.BasicSystem
 		{
 
 			public List<Entity> list { get => entities; }
@@ -27,8 +27,8 @@ namespace BattleBot.Systems
 				Initialize(e);
 			}
 
-			protected override void Draw(GameTime gameTime){ }
-            protected override void Update(GameTime gameTime) { }
+			public override void Draw(GameTime gameTime){ }
+            public override void Update(GameTime gameTime) { }
 
 		}
 
@@ -132,13 +132,9 @@ namespace BattleBot.Systems
 			Initialize(e);
 		}
 
-        protected override void Update(GameTime gameTime)
-        {
-            // no update
-        }
+        
 
-
-        protected override void PreDraw(GameTime gameTime)
+        public override void PreDraw(GameTime gameTime)
         {
 			// save textures to draw later.
             foreach (Entity camera in entities)
@@ -147,7 +143,7 @@ namespace BattleBot.Systems
             }
         }
 
-        protected override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
 		{
 
 			//Camera test = new(entities.First());
