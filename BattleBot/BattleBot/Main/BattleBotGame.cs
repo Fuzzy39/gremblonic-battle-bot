@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace BattleBot.Main
@@ -38,6 +39,7 @@ namespace BattleBot.Main
             new CameraRenderingSystem(engine);
             new CircleMovementSystem(engine);
             new CamTestSystem(engine);
+            new InputSystem(engine);
             engine.Initialize();
 
       
@@ -122,6 +124,15 @@ namespace BattleBot.Main
                 rotationalVelcocity = -1f,
                 otherRotationVelocity = -1f
 
+            });
+            PointRotation rot = (PointRotation)e.FindComponent<PointRotation>().First();
+            e.AddComponent(new InputComponent()
+            {
+                key = Keys.Space,
+                action = () => 
+                { 
+                    rot.rotationalVelcocity = -rot.rotationalVelcocity;
+                }
             });
 
             e.StopEditing();
