@@ -177,6 +177,7 @@ namespace EngineCore.Rendering
 
             gd.SetRenderTarget(target);
             spriteBatch.Begin();
+            gd.Clear(Color.Transparent);
             hasTarget = true;
 
         }

@@ -2,11 +2,13 @@
 using BattleBot.Systems;
 using EngineCore;
 using EngineCore.Rendering;
+using EngineCore.Util;
 using EngineCore.Util.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BattleBot.Main
 {
@@ -33,7 +35,9 @@ namespace BattleBot.Main
 
             engine = new(GraphicsDevice);
             new PixelRenderingSystem(engine);
+            new CameraRenderingSystem(engine);
             new CircleMovementSystem(engine);
+            new CamTestSystem(engine);
             engine.Initialize();
 
       
@@ -47,51 +51,111 @@ namespace BattleBot.Main
             assetManager = new(Content);
             Entity e;
 
-            // background
-            e = MakeSimpleEntity(new Rectangle(0, 0, 1600, 900), TextureAsset.BackgroundDark);
-            e.StopEditing();
-
-            // make an example entity.
-            e =  MakeSimpleEntity(new Rectangle(100, 100, 200, 200), TextureAsset.TestSquare );
-
-            e.AddComponent(new PointRotation()
+            // camera
+            e = new Entity(engine);
+            e.AddComponent(new PixelBounds()
             {
-                center = new Point(300, 300),
-                radius = 200,
-                rotationalVelcocity = 1f,
-                otherRotationVelocity = -.4f
+                Bounds = new RotatedRect(new Rectangle(0, 0, 1600, 900), 0f, new(0,0))
             });
-
+            e.AddComponent(new SimpleTexture()
+            {
+                Texture = assetManager.getTexture(TextureAsset.BackgroundDark),
+                Tint = Color.White
+            });
+            e.AddComponent(new CameraComponent()
+            {
+                Position = new Vector2(0f, 0f),
+                Scale = 100f,
+                Rotation = Angle.FromDegrees(0)
+            });
+            e.AddComponent(new CamTestComponent()
+            {
+                SecondsToMove = 3f,
+                Amplitude = new(10f, 10f, 100f),
+                Base = new(0,0, 100f),
+                Progress = 0f,
+                Stage = CamTestComponent.CamTestStage.X
+            });
             e.StopEditing();
+
+            // smaller camera
+            e = new Entity(engine);
+            e.AddComponent(new PixelBounds()
+            {
+                Bounds = new RotatedRect(new Rectangle(1200, 0, 400, 225), 0f, new(0, 0))
+            });
+            e.AddComponent(new SimpleTexture()
+            {
+                Texture = assetManager.getTexture(TextureAsset.BackgroundDark),
+                Tint = Color.White
+            });
+            e.AddComponent(new CameraComponent()
+            {
+                Position = new Vector2(0f, 0f),
+                Scale = 25f,
+                Rotation = Angle.FromDegrees(0)
+            });
+            e.StopEditing();
+
+
+            int width = 5;
+            int height = 5;
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.TestSquare);
+                    e.StopEditing();
+                }
+            }
+            // make an example entity.
+           
+
+    
 
             // make another example entity
-            e = MakeSimpleEntity(new Rectangle(100, 100, 100, 500), TextureAsset.TestSquare);
-
+            e = MakeSimpleEntity(new RectangleF(-.4f, -.4f, .8f, .8f), TextureAsset.Bot);
             e.AddComponent(new PointRotation()
             {
-                center = new Point(900, 450),
-                radius = 250,
-                rotationalVelcocity = -1.5f,
-                otherRotationVelocity = 4f
+                center = new Point(0, 0),
+                radius = 2,
+                rotationalVelcocity = -1f,
+                otherRotationVelocity = -1f
+
             });
 
             e.StopEditing();
+
+
+            //// make an example entity.
+            //e = new Entity(engine);
+            //e.AddComponent(new WorldBounds()
+            //{
+            //    Bounds = new RotatedRect(new RectangleF(-.5f, 1f, 1, 2), Angle.FromDegrees(45).Radians, new(.5f, .5f))
+            //});
+            //e.AddComponent(new SimpleTexture()
+            //{
+            //    Texture = assetManager.getTexture(TextureAsset.Bot),
+            //    Tint = Color.White
+            //});
+
+            //e.StopEditing();
         }
 
         // yeah, we're 100% going to need to sort out the entity creating.
         // the thing with making everything data is that data really doesn't belong in code.
-        private Entity MakeSimpleEntity(Rectangle bounds, TextureAsset text)
+        private Entity MakeSimpleEntity(RectangleF bounds, TextureAsset text)
         {
             Entity toReturn = new(engine);
-            toReturn.AddComponent(new PixelCoords()
+            toReturn.AddComponent(new WorldBounds()
             {
-                bounds = new RotatedRect(bounds, 0f, new(0, 0))
+                Bounds = new RotatedRect(bounds, 0f, new(0, 0))
             });
 
             toReturn.AddComponent(new SimpleTexture()
             {
-                texture = assetManager.getTexture(text),
-                tint = Color.White
+                Texture = assetManager.getTexture(text),
+                Tint = Color.White
             });
             return toReturn;
         }

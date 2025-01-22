@@ -18,22 +18,22 @@ namespace BattleBot.Systems
         public PixelRenderingSystem(Engine e) : base(e)
         {
             renderer = e.Renderer;
-            addRequiredComponent(typeof(PixelCoords));
-            addRequiredComponent(typeof(SimpleTexture));
-            initialize(e);
+            AddRequiredComponent(typeof(PixelBounds));
+            AddRequiredComponent(typeof(SimpleTexture));
+            Initialize(e);
         }
 
-        protected override void draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime)
         {
             foreach(Entity entity in entities)
             {
-                PixelCoords coords = (PixelCoords)entity.FindComponent<PixelCoords>().First();
+                PixelBounds coords = (PixelBounds)entity.FindComponent<PixelBounds>().First();
                 SimpleTexture texture = (SimpleTexture)entity.FindComponent<SimpleTexture>().First();
-                renderer.Draw(texture.texture, coords.bounds, texture.tint);
+                renderer.Draw(texture.Texture, coords.Bounds, texture.Tint);
             }
         }
 
-        protected override void update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)
         {
            // no update.
         }

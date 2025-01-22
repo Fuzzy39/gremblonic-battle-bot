@@ -46,7 +46,7 @@ namespace EngineCore
         {
             get { return primaryComponent; }
             set { 
-                if (isInitalized) throw new InvalidOperationException("RequiredComponents may not be modified after iniitalization"); 
+                if (isInitalized) throw new InvalidOperationException("RequiredComponents may not be modified after initalization"); 
 
                 if(value!=null && !value.IsAssignableTo(typeof(Component)))
                 {
@@ -69,11 +69,11 @@ namespace EngineCore
             requiredComponents = new();
         }
 
-        protected void addRequiredComponent(Type t)
+        protected void AddRequiredComponent(Type t)
         {
             if(isInitalized)
             {
-                throw new InvalidOperationException("RequiredComponents may not be modified after iniitalization");
+                throw new InvalidOperationException("RequiredComponents may not be modified after initalization");
             }
 
             if(!t.IsAssignableTo(typeof(Component)))
@@ -85,7 +85,7 @@ namespace EngineCore
             requiredComponents.Add(t);
         }
 
-        protected void addRequiredComponents(List<Type> types)
+        protected void AddRequiredComponents(List<Type> types)
         {
 
             if (isInitalized)
@@ -106,7 +106,7 @@ namespace EngineCore
         }
 
 
-        protected void initialize(Engine e)
+        protected void Initialize(Engine e)
         {
             if (requiredComponents.Count == 0)
             {
@@ -125,13 +125,20 @@ namespace EngineCore
             isRunning = true;
         }
 
-        internal protected abstract void update(GameTime gameTime);
 
+       
+        internal protected abstract void Update(GameTime gameTime);
 
-        internal protected abstract void draw(GameTime gameTime);
+        /// <summary>
+        /// Predrawing is for drawing to render targets before rendering the final image. Do NOT draw any sprites or graphics to the window during a predraw call.
+        /// </summary>
+        /// <param name="gameTime"></param>
+        internal protected virtual void PreDraw(GameTime gameTime) { }
+
+        internal protected abstract void Draw(GameTime gameTime);
         
 
-        internal void onEntityChanged(Entity e)
+        internal void OnEntityChanged(Entity e)
         {
             if(EntityMeetsRequirements(e))
             {
@@ -145,6 +152,12 @@ namespace EngineCore
             entities.Remove(e);
         }
 
+        /// <summary>
+        /// Returns whether an entity should be iterated over by this system.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         private bool EntityMeetsRequirements(Entity e)
         {
             bool toReturn = true;
@@ -168,7 +181,7 @@ namespace EngineCore
         }
 
 
-        internal void onEntityDestroyed(Entity e)
+        internal void OnEntityDestroyed(Entity e)
         {
 
             entities.Remove(e);

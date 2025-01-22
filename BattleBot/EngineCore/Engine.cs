@@ -36,7 +36,7 @@ namespace EngineCore
 
             foreach(System s in systems)
             {
-                s.onEntityChanged(e);
+                s.OnEntityChanged(e);
             }
         }
 
@@ -44,7 +44,7 @@ namespace EngineCore
         {
             foreach(System s in systems)
             {
-                s.onEntityDestroyed(e);
+                s.OnEntityDestroyed(e);
             }
         }
 
@@ -70,8 +70,10 @@ namespace EngineCore
 
             foreach (System s in systems)
             {
-                s.update(time);
+                s.Update(time);
             }
+
+    
         }
 
         public void Draw(GameTime time)
@@ -80,12 +82,18 @@ namespace EngineCore
             {
                 throw new InvalidOperationException("Can't draw before initialization.");
             }
-            renderer.Begin();
-          
 
+     
+            foreach(System s in systems)
+            {
+                s.PreDraw(time);
+            }
+
+           
+            renderer.Begin();
             foreach (System s in systems)
             {
-                s.draw(time);
+                s.Draw(time);
             }
 
             renderer.End();
