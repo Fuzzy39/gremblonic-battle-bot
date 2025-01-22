@@ -25,7 +25,7 @@ namespace BattleBot.Systems
         {
             foreach (Entity entity in entities)
             {
-                InputComponent input = (InputComponent)entity.FindComponent<InputComponent>().First();
+                InputComponent input = (InputComponent)entity.FindComponent<InputComponent>();
                 if (Keyboard.GetState().IsKeyDown(input.key))
                 {
                     input.action.Invoke();

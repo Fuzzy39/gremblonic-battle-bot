@@ -125,7 +125,7 @@ namespace BattleBot.Main
                 otherRotationVelocity = -1f
 
             });
-            PointRotation rot = (PointRotation)e.FindComponent<PointRotation>().First();
+            PointRotation rot = (PointRotation)e.FindComponent<PointRotation>();
             e.AddComponent(new InputComponent()
             {
                 key = Keys.Space,
