@@ -16,5 +16,7 @@ namespace BattleBot.Components
 
         public Texture2D Texture { get; internal set; }
         public Color Tint { get; internal set; }
+
+        public int Depth {  get; internal set; }
     }
 }

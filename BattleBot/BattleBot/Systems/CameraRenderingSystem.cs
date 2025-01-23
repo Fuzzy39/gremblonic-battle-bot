@@ -102,7 +102,7 @@ namespace BattleBot.Systems
                 RotatedRect spriteBounds = ToPixelBounds(renderableWorldBounds);
 
                 SimpleTexture st = renderable.FindComponent<SimpleTexture>();
-                renderer.Draw(st.Texture, spriteBounds, st.Tint);
+                renderer.Draw(st.Texture, spriteBounds, st.Tint, st.Depth);
             }
 
         }
@@ -188,7 +188,7 @@ namespace BattleBot.Systems
             // actually draw results to the screen
             foreach (Camera cam in cameras)
             {
-                renderer.Draw(cam.Component.RenderTarget, cam.PixelBounds, Color.White);
+                renderer.Draw(cam.Component.RenderTarget, cam.PixelBounds, Color.White, cam.Component.Depth);
             }
 
         }
@@ -213,7 +213,7 @@ namespace BattleBot.Systems
             {
                 RotatedRect bounds = toRender.FindComponent<WorldBounds>().Bounds;
                 //if (camera.WorldBounds.Intersects(bounds))
-                {
+                {   
                     camera.Render(renderer, toRender);
                 }
             }

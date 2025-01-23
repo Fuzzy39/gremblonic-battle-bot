@@ -29,7 +29,7 @@ namespace BattleBot.Systems
             {
                 PixelBounds coords = entity.FindComponent<PixelBounds>();
                 SimpleTexture texture = entity.FindComponent<SimpleTexture>();
-                renderer.Draw(texture.Texture, coords.Bounds, texture.Tint);
+                renderer.Draw(texture.Texture, coords.Bounds, texture.Tint, texture.Depth);
             }
         }
     }

@@ -33,10 +33,17 @@ namespace BattleBot.Components
         public Angle Rotation { get; set; }
 
 
+        // this should maybe be broken off into its own component or something?
+        // targetTexture?
+
         /// <summary>
         /// Holds the graphics data for what the camera sees.
         /// </summary>
         public RenderTarget2D RenderTarget { get; set; }
 
+        /// <summary>
+        /// What order this camera will be rendered. Higher values are rendered last.
+        /// </summary>
+        public int Depth { get; set; }
     }
 }

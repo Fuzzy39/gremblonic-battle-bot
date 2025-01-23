@@ -62,24 +62,28 @@ namespace BattleBot.Main
             e.AddComponent(new SimpleTexture()
             {
                 Texture = assetManager.getTexture(TextureAsset.BackgroundDark),
-                Tint = Color.White
+                Tint = Color.White,
+                Depth = 0
             });
             e.AddComponent(new CameraComponent()
             {
                 Position = new Vector2(0f, 0f),
-                Scale = 200f,
-                Rotation = Angle.FromDegrees(0)
+                Scale = 100f,
+                Rotation = Angle.FromDegrees(0),
+                Depth = 0
             });
-            e.AddComponent(new CamTestComponent()
-            {
-                SecondsToMove = 5f,
-                Amplitude = new(10f, 10f, 300f),
-                Base = new(0,0, 200f),
-                Progress = 0f,
-                Stage = CamTestComponent.CamTestStage.X
-            });
+            //e.AddComponent(new CamTestComponent()
+            //{
+            //    SecondsToMove = 5f,
+            //    Amplitude = new(10f, 10f, 300f),
+            //    Base = new(0,0, 100f),
+            //    Progress = 0f,
+            //    Stage = CamTestComponent.CamTestStage.X
+            //});
             e.StopEditing();
 
+
+            /*
             // smaller camera
             e = new Entity(engine);
             e.AddComponent(new PixelBounds()
@@ -89,34 +93,21 @@ namespace BattleBot.Main
             e.AddComponent(new SimpleTexture()
             {
                 Texture = assetManager.getTexture(TextureAsset.BackgroundDark),
-                Tint = Color.White
+                Tint = Color.White,
+                Depth = 1
             });
             e.AddComponent(new CameraComponent()
             {
                 Position = new Vector2(0f, 0f),
                 Scale = 25f,
-                Rotation = Angle.FromDegrees(0)
+                Rotation = Angle.FromDegrees(0),
+                Depth = 1
             });
-            e.StopEditing();
+            e.StopEditing();*/
 
-
-            int width = 5;
-            int height = 5;
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.TestSquare);
-                    e.StopEditing();
-                }
-            }
-            // make an example entity.
-           
-
-    
 
             // make another example entity
-            e = MakeSimpleEntity(new RectangleF(-.4f, -.4f, .8f, .8f), TextureAsset.Bot);
+            e = MakeSimpleEntity(new RectangleF(-.4f, -.4f, .8f, .8f), TextureAsset.Bot, 0);
             e.AddComponent(new PointRotation()
             {
                 center = new Point(0, 0),
@@ -125,7 +116,26 @@ namespace BattleBot.Main
                 otherRotationVelocity = -1f
 
             });
-            PointRotation rot = (PointRotation)e.FindComponent<PointRotation>();
+            e.StopEditing();
+          
+
+            int width = 5;
+            int height = 5;
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.TestSquare, 0);
+                    e.StopEditing();
+                }
+            }
+            // make an example entity.
+
+
+
+
+            //PointRotation rot = (PointRotation)e.FindComponent<PointRotation>();
+            /*
             e.AddComponent(new InputComponent()
             {
                 key = Keys.Space,
@@ -135,27 +145,15 @@ namespace BattleBot.Main
                 }
             });
 
-            e.StopEditing();
+            e.StopEditing();*/
 
 
-            //// make an example entity.
-            //e = new Entity(engine);
-            //e.AddComponent(new WorldBounds()
-            //{
-            //    Bounds = new RotatedRect(new RectangleF(-.5f, 1f, 1, 2), Angle.FromDegrees(45).Radians, new(.5f, .5f))
-            //});
-            //e.AddComponent(new SimpleTexture()
-            //{
-            //    Texture = assetManager.getTexture(TextureAsset.Bot),
-            //    Tint = Color.White
-            //});
-
-            //e.StopEditing();
+         
         }
 
         // yeah, we're 100% going to need to sort out the entity creating.
         // the thing with making everything data is that data really doesn't belong in code.
-        private Entity MakeSimpleEntity(RectangleF bounds, TextureAsset text)
+        private Entity MakeSimpleEntity(RectangleF bounds, TextureAsset text, int depth)
         {
             Entity toReturn = new(engine);
             toReturn.AddComponent(new WorldBounds()
@@ -166,7 +164,8 @@ namespace BattleBot.Main
             toReturn.AddComponent(new SimpleTexture()
             {
                 Texture = assetManager.getTexture(text),
-                Tint = Color.White
+                Tint = Color.White,
+                Depth = depth
             });
             return toReturn;
         }

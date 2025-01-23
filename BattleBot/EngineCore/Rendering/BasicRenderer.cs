@@ -38,7 +38,7 @@ namespace EngineCore.Rendering
 
         }
 
-        public void Draw(Texture2D texture, RotatedRect destination, Rectangle source, Color color)
+        public void Draw(Texture2D texture, RotatedRect destination, Rectangle source, Color color, int depth)
         {
 
 
@@ -51,7 +51,7 @@ namespace EngineCore.Rendering
                 color,
                 destination.Rotation.Radians,
                 new(0),
-                SpriteEffects.None, 0f
+                SpriteEffects.None, depth
             );
 
             if (!hasTarget)
