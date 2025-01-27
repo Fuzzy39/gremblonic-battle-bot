@@ -63,14 +63,14 @@ namespace BattleBot.Main
             {
                 Texture = assetManager.getTexture(TextureAsset.BackgroundDark),
                 Tint = Color.White,
-                Depth = 0
+                Depth = .5f
             });
             e.AddComponent(new CameraComponent()
             {
                 Position = new Vector2(0f, 0f),
                 Scale = 100f,
                 Rotation = Angle.FromDegrees(0),
-                Depth = 0
+                Depth = .5f
             });
             //e.AddComponent(new CamTestComponent()
             //{
@@ -106,8 +106,22 @@ namespace BattleBot.Main
             e.StopEditing();*/
 
 
+          
+
+            int width = 5;
+            int height = 5;
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.TestSquare, 0.5f);
+                    e.StopEditing();
+                }
+            }
+            // make an example entity.
+
             // make another example entity
-            e = MakeSimpleEntity(new RectangleF(-.4f, -.4f, .8f, .8f), TextureAsset.Bot, 0);
+            e = MakeSimpleEntity(new RectangleF(-.4f, -.4f, .8f, .8f), TextureAsset.Bot, 0.3f);
             e.AddComponent(new PointRotation()
             {
                 center = new Point(0, 0),
@@ -117,20 +131,6 @@ namespace BattleBot.Main
 
             });
             e.StopEditing();
-          
-
-            int width = 5;
-            int height = 5;
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.TestSquare, 0);
-                    e.StopEditing();
-                }
-            }
-            // make an example entity.
-
 
 
 
@@ -148,12 +148,12 @@ namespace BattleBot.Main
             e.StopEditing();*/
 
 
-         
+
         }
 
         // yeah, we're 100% going to need to sort out the entity creating.
         // the thing with making everything data is that data really doesn't belong in code.
-        private Entity MakeSimpleEntity(RectangleF bounds, TextureAsset text, int depth)
+        private Entity MakeSimpleEntity(RectangleF bounds, TextureAsset text, float depth)
         {
             Entity toReturn = new(engine);
             toReturn.AddComponent(new WorldBounds()

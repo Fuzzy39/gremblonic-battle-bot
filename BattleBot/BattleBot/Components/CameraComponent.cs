@@ -44,6 +44,6 @@ namespace BattleBot.Components
         /// <summary>
         /// What order this camera will be rendered. Higher values are rendered last.
         /// </summary>
-        public int Depth { get; set; }
+        public float Depth { get; set; }
     }
 }

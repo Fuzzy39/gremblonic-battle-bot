@@ -95,10 +95,14 @@ namespace EngineCore.Rendering
             
         }
 
-        public virtual void Draw(Texture2D texture, RotatedRect destination, Rectangle source, Color color, int depth)
+        public virtual void Draw(Texture2D texture, RotatedRect destination, Rectangle source, Color color, float depth)
         {
 
-
+            if (depth < 0 || depth > 1)
+            {
+                // I figured this out from a monogame forum thread, but I can't say I 100% understand why. I guess it has something to do with the frustrum monogame assumes, and depth is a position between two points?
+                throw new ArgumentException("Depth must be between 0 and 1.");
+            }
 
 
             spriteBatch.Draw(
