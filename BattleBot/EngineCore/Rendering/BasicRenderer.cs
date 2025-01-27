@@ -76,7 +76,7 @@ namespace EngineCore.Rendering
             {
                 throw new InvalidOperationException("Has a render target.");
             }
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.BackToFront);
         }
 
         public void End()
@@ -110,7 +110,7 @@ namespace EngineCore.Rendering
 
 
             gd.SetRenderTarget(target);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.BackToFront);
             gd.Clear(Color.Transparent);
             hasTarget = true;
 

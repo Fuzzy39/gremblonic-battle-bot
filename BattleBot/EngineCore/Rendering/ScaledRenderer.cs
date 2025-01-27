@@ -137,7 +137,7 @@ namespace EngineCore.Rendering
             }
             gd.SetRenderTarget(virtualWindow);
             gd.Clear(Color.Black);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.BackToFront);
         }
 
         public void End()
@@ -150,7 +150,7 @@ namespace EngineCore.Rendering
             gd.SetRenderTarget(null);
 
             // render to the real screen (coward, you won't!)
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.BackToFront);
             Rectangle bounds = doLetterboxing ? MaxUsableBounds : new Rectangle(new(0, 0), WindowSize);
             spriteBatch.Draw(virtualWindow, bounds, Color.White);
             spriteBatch.End();
@@ -181,7 +181,7 @@ namespace EngineCore.Rendering
 
 
             gd.SetRenderTarget(target);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.BackToFront);
             gd.Clear(Color.Transparent);
             hasTarget = true;
 

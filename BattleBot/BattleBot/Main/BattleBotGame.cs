@@ -31,8 +31,9 @@ namespace BattleBot.Main
         protected override void Initialize()
         {
             Window.AllowUserResizing = true;
-          
 
+
+            sp = new SpriteBatch(GraphicsDevice);
 
             engine = new(GraphicsDevice);
             new PixelRenderingSystem(engine);
@@ -53,11 +54,14 @@ namespace BattleBot.Main
             assetManager = new(Content);
             Entity e;
 
-            // camera
-            e = new Entity(engine);
+
+
+
+           // camera
+           e = new Entity(engine);
             e.AddComponent(new PixelBounds()
             {
-                Bounds = new RotatedRect(new Rectangle(0, 0, 1600, 900), Angle.FromRadians(0f), new(0,0))
+                Bounds = new RotatedRect(new Rectangle(0, 0, 1600, 900), Angle.FromRadians(0f), new(0, 0))
             });
             e.AddComponent(new SimpleTexture()
             {
@@ -68,22 +72,22 @@ namespace BattleBot.Main
             e.AddComponent(new CameraComponent()
             {
                 Position = new Vector2(0f, 0f),
-                Scale = 100f,
+                Scale = 200f,
                 Rotation = Angle.FromDegrees(0),
                 Depth = .5f
             });
-            //e.AddComponent(new CamTestComponent()
-            //{
-            //    SecondsToMove = 5f,
-            //    Amplitude = new(10f, 10f, 300f),
-            //    Base = new(0,0, 100f),
-            //    Progress = 0f,
-            //    Stage = CamTestComponent.CamTestStage.X
-            //});
+            e.AddComponent(new CamTestComponent()
+            {
+                SecondsToMove = 5f,
+                Amplitude = new(10f, 10f, 300f),
+                Base = new(0, 0, 200f),
+                Progress = 0f,
+                Stage = CamTestComponent.CamTestStage.X
+            });
             e.StopEditing();
 
 
-            /*
+            
             // smaller camera
             e = new Entity(engine);
             e.AddComponent(new PixelBounds()
@@ -94,34 +98,24 @@ namespace BattleBot.Main
             {
                 Texture = assetManager.getTexture(TextureAsset.BackgroundDark),
                 Tint = Color.White,
-                Depth = 1
+                Depth = .4f
             });
             e.AddComponent(new CameraComponent()
             {
                 Position = new Vector2(0f, 0f),
                 Scale = 25f,
                 Rotation = Angle.FromDegrees(0),
-                Depth = 1
+                Depth = .4f
             });
-            e.StopEditing();*/
+            e.StopEditing();
 
 
-          
 
-            int width = 5;
-            int height = 5;
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.TestSquare, 0.5f);
-                    e.StopEditing();
-                }
-            }
-            // make an example entity.
 
-            // make another example entity
-            e = MakeSimpleEntity(new RectangleF(-.4f, -.4f, .8f, .8f), TextureAsset.Bot, 0.3f);
+
+
+            // make another example entity that spins real good
+            e = MakeSimpleEntity(new RectangleF(-.4f, -.4f, .8f, .8f), TextureAsset.Bot, 0.8f);
             e.AddComponent(new PointRotation()
             {
                 center = new Point(0, 0),
@@ -130,22 +124,31 @@ namespace BattleBot.Main
                 otherRotationVelocity = -1f
 
             });
-            e.StopEditing();
-
-
-
-            //PointRotation rot = (PointRotation)e.FindComponent<PointRotation>();
-            /*
+   
+            PointRotation rot = (PointRotation)e.FindComponent<PointRotation>();
             e.AddComponent(new InputComponent()
             {
                 key = Keys.Space,
-                action = () => 
-                { 
+                action = () =>
+                {
                     rot.rotationalVelcocity = -rot.rotationalVelcocity;
                 }
             });
 
-            e.StopEditing();*/
+            e.StopEditing();
+
+            int width = 5;
+            int height = 5;
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.TestSquare, 0.9f);
+                    e.StopEditing();
+                }
+            }
+            // make an example entity.
+
 
 
 
@@ -180,10 +183,11 @@ namespace BattleBot.Main
             base.Update(gameTime);
         }
 
+        SpriteBatch sp;
+
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
+           
 
             engine.Draw(gameTime);
             base.Draw(gameTime);
