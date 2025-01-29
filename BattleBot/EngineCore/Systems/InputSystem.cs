@@ -1,14 +1,13 @@
-﻿
-using BattleBot.Components;
-using EngineCore;
+﻿using EngineCore;
+using EngineCore.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Linq;
 
-namespace BattleBot.Systems
+namespace EngineCore.Systems
 {
-    internal class InputSystem : EngineCore.BasicSystem
+    internal class InputSystem : BasicSystem
     {
         public InputSystem(Engine e) : base(e)
         {
@@ -20,7 +19,7 @@ namespace BattleBot.Systems
         {
             foreach (Entity entity in entities)
             {
-                InputComponent input = entity.FindComponent<InputComponent>();
+                InputComponent input = entity.FindComponent<InputComponent>()!;
                 if (Keyboard.GetState().IsKeyDown(input.key))
                 {
                     input.action.Invoke();

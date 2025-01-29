@@ -1,4 +1,5 @@
 ﻿using EngineCore.Rendering;
+using EngineCore.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -12,8 +13,8 @@ namespace EngineCore
     public sealed class Engine
     {
 
-        private BatchRenderer renderer;
-        private List<System> systems;
+        private readonly BatchRenderer renderer;
+        private readonly List<System> systems;
         private bool isInitialized;
         
 
@@ -22,8 +23,13 @@ namespace EngineCore
         public Engine(GraphicsDevice graphics)
         {
             renderer = new ScaledRenderer(graphics, new(1600, 900), true);
-            systems = new List<System>();
+            systems = [];
             isInitialized = false;
+
+            new PixelRenderingSystem(this);
+            new CameraRenderingSystem(this);
+            new InputSystem(this);
+
         }
 
         internal void OnEntityChanged(Entity e) 

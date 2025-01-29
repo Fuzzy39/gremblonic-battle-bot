@@ -20,16 +20,16 @@ namespace EngineCore.Rendering
         /// <param name="destinationRectangle"></param>
         /// <param name="color"></param>
         /// <param name="rotation">rotation around center of destination in radians</param>
-        /// <param name="depth">Lower depths are rendered on top of Higher depths.</param>
+        /// <param name="priority">higher priority draw calls will be rendered on top of lower priorities. Default is 0.</param>
         /// 
-        public void Draw(Texture2D texture, RotatedRect position, Rectangle sourceRect, Color color, float depth);
+        public void Draw(Texture2D texture, RotatedRect position, Rectangle sourceRect, Color color, byte priority);
 
         public void Draw(Texture2D texture, RotatedRect position, Rectangle sourceRect, Color color)
         {
             Draw(texture, position, new(new(), new(texture.Width, texture.Height)), color, 0);
         }
 
-        public void Draw(Texture2D texture, RotatedRect position, Color color, float depth)
+        public void Draw(Texture2D texture, RotatedRect position, Color color, byte depth)
         {
             Draw(texture, position, new(new(), new(texture.Width, texture.Height)), color, depth);
         }
@@ -39,7 +39,7 @@ namespace EngineCore.Rendering
             Draw(texture, position, new(new(), new(texture.Width, texture.Height)), color);
         }
 
-        public void Draw(Texture2D texture, RectangleF position, Color color, float depth)
+        public void Draw(Texture2D texture, RectangleF position, Color color, byte depth)
         {
             Draw(texture, new RotatedRect(position.Location, position.Size, Angle.FromRadians(0), new(0)), color, depth);
         }
@@ -49,7 +49,7 @@ namespace EngineCore.Rendering
             Draw(texture, new RotatedRect(position.Location, position.Size, Angle.FromRadians(0), new(0)), color);
         }
 
-        public void Draw(Texture2D texture, Rectangle position, Color color, float depth)
+        public void Draw(Texture2D texture, Rectangle position, Color color, byte depth)
         {
             Draw(texture, new RectangleF(position), color, depth);
         }
@@ -59,7 +59,7 @@ namespace EngineCore.Rendering
             Draw(texture, new RectangleF(position), color);
         }
 
-        public void Draw(Texture2D texture, RectangleF position, Direction d, Color color, float depth)
+        public void Draw(Texture2D texture, RectangleF position, Direction d, Color color, byte depth)
         {
             Draw(texture, new RotatedRect(position.Location, position.Size, d.ToAngle(), new(.5f)), color, depth);
         }

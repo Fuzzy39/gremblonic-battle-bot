@@ -5,18 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Components
+namespace EngineCore.Components
 {
     /// <summary>
     /// a description of the entities bounds in a game-world.
     /// </summary>
-    internal class WorldBounds : EngineCore.Component
+    public class WorldBounds : Component
     {
 
         /// <summary>
         /// a description of the entities position in a game-world, in 'tiles'.
         /// </summary>
-        public RotatedRect Bounds { get; set; }
+        required public RotatedRect Bounds { get; set; }
     }
 
 }

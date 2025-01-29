@@ -6,16 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Components
+namespace EngineCore.Components
 {
     /// <summary>
     /// a position on the screen.
     /// </summary>
-    internal class PixelBounds : EngineCore.Component
+    public class PixelBounds : Component
     {
         /// <summary>
         /// a description of the entities position on the screen, in (virtual) pixels.
         /// </summary>
-        public RotatedRect Bounds {  get; set; }
+        required public RotatedRect Bounds { get; set; }
     }
 }

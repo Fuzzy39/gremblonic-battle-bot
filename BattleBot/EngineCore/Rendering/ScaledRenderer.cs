@@ -95,15 +95,8 @@ namespace EngineCore.Rendering
             
         }
 
-        public virtual void Draw(Texture2D texture, RotatedRect destination, Rectangle source, Color color, float depth)
+        public virtual void Draw(Texture2D texture, RotatedRect destination, Rectangle source, Color color, byte depth)
         {
-
-            if (depth < 0 || depth > 1)
-            {
-                // I figured this out from a monogame forum thread, but I can't say I 100% understand why. I guess it has something to do with the frustrum monogame assumes, and depth is a position between two points?
-                throw new ArgumentException("Depth must be between 0 and 1.");
-            }
-
 
             spriteBatch.Draw(
                 texture,
@@ -112,7 +105,8 @@ namespace EngineCore.Rendering
                 color,
                 destination.Rotation.Radians,
                 new(0),
-                SpriteEffects.None, depth
+                SpriteEffects.None,
+                depth/255f
             );
 
             if (!hasTarget)
@@ -137,7 +131,7 @@ namespace EngineCore.Rendering
             }
             gd.SetRenderTarget(virtualWindow);
             gd.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.BackToFront);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
         }
 
         public void End()
@@ -150,7 +144,7 @@ namespace EngineCore.Rendering
             gd.SetRenderTarget(null);
 
             // render to the real screen (coward, you won't!)
-            spriteBatch.Begin(SpriteSortMode.BackToFront);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
             Rectangle bounds = doLetterboxing ? MaxUsableBounds : new Rectangle(new(0, 0), WindowSize);
             spriteBatch.Draw(virtualWindow, bounds, Color.White);
             spriteBatch.End();
@@ -181,7 +175,7 @@ namespace EngineCore.Rendering
 
 
             gd.SetRenderTarget(target);
-            spriteBatch.Begin(SpriteSortMode.BackToFront);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
             gd.Clear(Color.Transparent);
             hasTarget = true;
 

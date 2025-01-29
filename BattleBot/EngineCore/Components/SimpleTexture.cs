@@ -6,17 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Components
+namespace EngineCore.Components
 {
-    internal class SimpleTexture : EngineCore.Component 
+    public class SimpleTexture : Component
     {
         // about as simple as possible. Could account for spritesheets or something but that's not the point right now.
-        public Texture2D texture;
-        public Color tint;
+        public required Texture2D Texture { get;  set; }
+        public required Color Tint { get;  set; }
 
-        public Texture2D Texture { get; internal set; }
-        public Color Tint { get; internal set; }
-
-        public float Depth {  get; internal set; }
+        public byte Priority { get;  set; }
     }
 }

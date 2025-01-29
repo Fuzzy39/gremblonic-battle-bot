@@ -1,5 +1,5 @@
-﻿using BattleBot.Components;
-using EngineCore;
+﻿using EngineCore;
+using EngineCore.Components;
 using EngineCore.Rendering;
 using EngineCore.Util;
 using Microsoft.Xna.Framework;
@@ -11,9 +11,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Systems
+namespace EngineCore.Systems
 {
-    internal class CameraRenderingSystem : EngineCore.System
+    internal class CameraRenderingSystem : System
     {
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace BattleBot.Systems
         private class Camera
         {
 
-            private Entity entity;
+            private readonly Entity entity;
 
             public Entity Entity { get { return entity; } }
 
@@ -45,7 +45,7 @@ namespace BattleBot.Systems
             {
                 get
                 {
-                    RotatedRect toReturn = new RotatedRect(
+                    RotatedRect toReturn = new(
                         new Vector2(0, 0),
                         PixelBounds.Size / Component.Scale,
                         -Component.Rotation,
@@ -62,7 +62,7 @@ namespace BattleBot.Systems
             {
                 get
                 {
-                    return entity.FindComponent<CameraComponent>();
+                    return entity.FindComponent<CameraComponent>()!;
                 }
             }
 
@@ -70,7 +70,7 @@ namespace BattleBot.Systems
             {
                 get
                 {
-                    return entity.FindComponent<PixelBounds>().Bounds;
+                    return entity.FindComponent<PixelBounds>()!.Bounds;
                 }
 
             }
@@ -81,7 +81,7 @@ namespace BattleBot.Systems
                 Angle rotation = Component.Rotation + objectBounds.Rotation;
 
 
-                RotatedRect RenderBounds = new RotatedRect(new RectangleF(0, 0, PixelBounds.Width, PixelBounds.Height), Angle.FromRadians(0), new());
+                RotatedRect RenderBounds = new(new RectangleF(0, 0, PixelBounds.Width, PixelBounds.Height), Angle.FromRadians(0), new());
 
                 // a glorious transformation. Hopefully it works.
                 Vector2 internalRep = WorldBounds.ToInternalRepresentation(objectBounds.TopLeft);
@@ -98,19 +98,19 @@ namespace BattleBot.Systems
             public void Render(Renderer renderer, Entity renderable)
             {
                 // we must convert world bou
-                RotatedRect renderableWorldBounds = renderable.FindComponent<WorldBounds>().Bounds;
+                RotatedRect renderableWorldBounds = renderable.FindComponent<WorldBounds>()!.Bounds;
                 RotatedRect spriteBounds = ToPixelBounds(renderableWorldBounds);
 
-                SimpleTexture st = renderable.FindComponent<SimpleTexture>();
-                renderer.Draw(st.Texture, spriteBounds, st.Tint, st.Depth);
+                SimpleTexture st = renderable.FindComponent<SimpleTexture>()!;
+                renderer.Draw(st.Texture, spriteBounds, st.Tint, st.Priority);
             }
 
         }
 
-        private BatchRenderer renderer;
+        private readonly BatchRenderer renderer;
 
-        private List<Camera> cameras;
-        private List<Entity> renderables;
+        private readonly List<Camera> cameras;
+        private readonly List<Entity> renderables;
 
 
         public bool IsRunning { get; set; }
@@ -119,14 +119,14 @@ namespace BattleBot.Systems
         {
             // initalize members
             renderer = e.Renderer;
-            cameras = new List<Camera>();
-            renderables = new();
+            cameras = []; // huh, neat, this calls the constructor.
+            renderables = [];
 
             // all systems should make this call!
             e.OnSystemCreated(this);
         }
 
-        
+
 
         public void OnEntityChanged(Entity e)
         {
@@ -134,9 +134,9 @@ namespace BattleBot.Systems
             if (Camera.IsCameraEntity(e))
             {
                 if (cameras.Any(cam => cam.Entity == e)) return;
-                
+
                 // add the new camera
-                Camera cam = new Camera(e);
+                Camera cam = new(e);
                 cameras.Add(cam);
                 return;
             }
@@ -144,9 +144,9 @@ namespace BattleBot.Systems
             cameras.RemoveAll(cam => cam.Entity == e);
 
             // renderable
-            if (isRenderable(e))
+            if (IsRenderable(e))
             {
-                if(!renderables.Contains(e)) renderables.Add(e);
+                if (!renderables.Contains(e)) renderables.Add(e);
                 return;
             }
 
@@ -164,7 +164,7 @@ namespace BattleBot.Systems
             renderables.Remove(e);
         }
 
-        private bool isRenderable(Entity e)
+        private static bool IsRenderable(Entity e)
         {
             return e.HasComponent<WorldBounds>() && e.HasComponent<SimpleTexture>();
         }
@@ -188,7 +188,8 @@ namespace BattleBot.Systems
             // actually draw results to the screen
             foreach (Camera cam in cameras)
             {
-                renderer.Draw(cam.Component.RenderTarget, cam.PixelBounds, Color.White, cam.Component.Depth);
+                // RenderTarget should not be null here since PreDraw should instantiate it
+                renderer.Draw(cam.Component.RenderTarget!, cam.PixelBounds, Color.White, cam.Component.Priority);
             }
 
         }
@@ -197,7 +198,7 @@ namespace BattleBot.Systems
         {
 
             // create a target to render to.
-            RenderTarget2D target = camera.Component.RenderTarget;
+            RenderTarget2D? target = camera.Component.RenderTarget;
 
             // if the target does not exist or the camera's changed size, we need to make a new target
             if (target == null || target.Bounds.Size != camera.PixelBounds.Size.ToPoint())
@@ -211,9 +212,10 @@ namespace BattleBot.Systems
             // render to the target
             foreach (Entity toRender in renderables)
             {
-                RotatedRect bounds = toRender.FindComponent<WorldBounds>().Bounds;
+                RotatedRect bounds = toRender.FindComponent<WorldBounds>()!.Bounds;
+                // This line doesn't work right!
                 //if (camera.WorldBounds.Intersects(bounds))
-                {   
+                {
                     camera.Render(renderer, toRender);
                 }
             }

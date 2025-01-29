@@ -1,5 +1,5 @@
-﻿using BattleBot.Components;
-using EngineCore;
+﻿using EngineCore;
+using EngineCore.Components;
 using EngineCore.Rendering;
 using Microsoft.Xna.Framework;
 using System;
@@ -8,12 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Systems
+namespace EngineCore.Systems
 {
-    internal class PixelRenderingSystem : EngineCore.BasicSystem
+    internal class PixelRenderingSystem : BasicSystem
     {
 
-        private Renderer renderer;
+        private readonly Renderer renderer;
 
         public PixelRenderingSystem(Engine e) : base(e)
         {
@@ -27,9 +27,9 @@ namespace BattleBot.Systems
         {
             foreach (Entity entity in entities)
             {
-                PixelBounds coords = entity.FindComponent<PixelBounds>();
-                SimpleTexture texture = entity.FindComponent<SimpleTexture>();
-                renderer.Draw(texture.Texture, coords.Bounds, texture.Tint, texture.Depth);
+                PixelBounds coords = entity.FindComponent<PixelBounds>()!;
+                SimpleTexture texture = entity.FindComponent<SimpleTexture>()!;
+                renderer.Draw(texture.Texture, coords.Bounds, texture.Tint, texture.Priority);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using BattleBot.Components;
 using EngineCore;
+using EngineCore.Components;
 using EngineCore.Rendering;
 using EngineCore.Util;
 using Microsoft.Xna.Framework;
