@@ -214,7 +214,7 @@ namespace EngineCore.Systems
             {
                 RotatedRect bounds = toRender.FindComponent<WorldBounds>()!.Bounds;
                 // This line doesn't work right!
-                //if (camera.WorldBounds.Intersects(bounds))
+                if (camera.WorldBounds.Intersects(bounds))
                 {
                     camera.Render(renderer, toRender);
                 }

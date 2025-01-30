@@ -412,16 +412,8 @@ namespace EngineCore.Util
 
         public bool Contains(Vector2 point)
         {
-            RectangleF rectangleF = AsRectangleF;
-
-            float relX = point.X - X;
-            float relY = point.Y - Y;
-
-            float x = relX * Cos(Rotation.Radians) - relY * Sin(Rotation.Radians) + X;
-            float y = relX * Sin(Rotation.Radians) + relY * Cos(Rotation.Radians) + Y;
-
-            Vector2 toCheck = new(x, y);
-            return rectangleF.Contains(toCheck);
+            point = ToInternalRepresentation(point);
+            return new RectangleF(0,0,1,1).Contains(point);
 
         }
 

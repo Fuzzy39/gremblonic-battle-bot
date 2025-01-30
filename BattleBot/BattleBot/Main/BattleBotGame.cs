@@ -83,7 +83,7 @@ namespace BattleBot.Main
             e.StopEditing();
 
 
-            
+
             // smaller camera
             e = new Entity(engine);
             e.AddComponent(new PixelBounds()
