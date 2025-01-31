@@ -70,7 +70,8 @@ namespace BattleBot.Main
                 Position = new Vector2(0f, 0f),
                 Scale = 200f,
                 Rotation = Angle.FromDegrees(0),
-                Priority = (byte)DrawPriority.Background
+                Priority = (byte)DrawPriority.Background,
+                MapID = 1
             });
             e.AddComponent(new CamTestComponent()
             {
@@ -101,7 +102,8 @@ namespace BattleBot.Main
                 Position = new Vector2(0f, 0f),
                 Scale = 25f,
                 Rotation = Angle.FromDegrees(0),
-                Priority = (byte)DrawPriority.Foreground
+                Priority = (byte)DrawPriority.Foreground,
+                MapID = 2
             });
             e.StopEditing();
 
@@ -111,7 +113,7 @@ namespace BattleBot.Main
 
 
             // make an example entity that spins real good
-            e = MakeSimpleEntity(new RectangleF(-.4f, -.4f, .8f, .8f), TextureAsset.Bot, (byte)DrawPriority.Foreground);
+            e = MakeSimpleEntity(new RectangleF(-.4f, -.4f, .8f, .8f), TextureAsset.Bot, (byte)DrawPriority.Foreground, 2);
             e.AddComponent(new PointRotation()
             {
                 center = new Point(0, 0),
@@ -142,7 +144,7 @@ namespace BattleBot.Main
             {
                 for (int y = 0; y < height; y++)
                 {
-                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.Floor, (byte)DrawPriority.Background);
+                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.Floor, (byte)DrawPriority.Background, 1);
                     e.StopEditing();
                 }
             }
@@ -155,12 +157,13 @@ namespace BattleBot.Main
 
         // yeah, we're 100% going to need to sort out the entity creating.
         // the thing with making everything data is that data really doesn't belong in code.
-        private Entity MakeSimpleEntity(RectangleF bounds, TextureAsset text, byte depth)
+        private Entity MakeSimpleEntity(RectangleF bounds, TextureAsset text, byte depth, int mapID)
         {
             Entity toReturn = new(engine);
-            toReturn.AddComponent(new WorldBounds()
+            toReturn.AddComponent(new MapBounds()
             {
-                Bounds = new RotatedRect(bounds, Angle.FromRadians(0f), new(0, 0))
+                Bounds = new RotatedRect(bounds, Angle.FromRadians(0f), new(0, 0)),
+                MapID = mapID
             });
 
             toReturn.AddComponent(new SimpleTexture()

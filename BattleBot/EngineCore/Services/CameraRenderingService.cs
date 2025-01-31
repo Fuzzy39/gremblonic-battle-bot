@@ -97,7 +97,7 @@ namespace EngineCore.Services
             public void Render(Renderer renderer, Entity renderable)
             {
                 // we must convert world bou
-                RotatedRect renderableWorldBounds = renderable.FindComponent<WorldBounds>()!.Bounds;
+                RotatedRect renderableWorldBounds = renderable.FindComponent<MapBounds>()!.Bounds;
                 RotatedRect spriteBounds = ToPixelBounds(renderableWorldBounds);
 
                 SimpleTexture st = renderable.FindComponent<SimpleTexture>()!;
@@ -109,7 +109,7 @@ namespace EngineCore.Services
         private readonly BatchRenderer renderer;
 
         private readonly List<Camera> cameras;
-        private readonly List<Entity> renderables;
+        private readonly Dictionary<int, List<Entity>> renderables;
 
 
         public bool IsRunning { get; set; }
@@ -137,19 +137,36 @@ namespace EngineCore.Services
                 // add the new camera
                 Camera cam = new(e);
                 cameras.Add(cam);
+                if (!renderables.ContainsKey(cam.Component.MapID))
+                { 
+                    renderables.Add(cam.Component.MapID, []);
+                }
                 return;
             }
 
             cameras.RemoveAll(cam => cam.Entity == e);
 
-            // renderable
-            if (IsRenderable(e))
+            if (!e.HasComponent<MapBounds>())
             {
-                if (!renderables.Contains(e)) renderables.Add(e);
+                // not renderable.
                 return;
             }
 
-            renderables.Remove(e);
+            int mapID = e.FindComponent<MapBounds>()!.MapID;
+
+            // renderable
+            if (IsRenderable(e))
+            {
+                if (!renderables.ContainsKey(mapID)) { renderables.Add(mapID, []); }
+                if (!renderables[mapID].Contains(e)) renderables[mapID].Add(e);
+                return;
+            }
+
+            if (renderables.ContainsKey(mapID))
+            {
+                renderables[e.FindComponent<MapBounds>()!.MapID].Remove(e);
+            }
+            
         }
 
         public void OnEntityDestroyed(Entity e)
@@ -160,12 +177,12 @@ namespace EngineCore.Services
                 return;
             }
 
-            renderables.Remove(e);
+            renderables[e.FindComponent<MapBounds>()!.MapID].Remove(e);
         }
 
         private static bool IsRenderable(Entity e)
         {
-            return e.HasComponent<WorldBounds>() && e.HasComponent<SimpleTexture>();
+            return e.HasComponent<MapBounds>() && e.HasComponent<SimpleTexture>();
         }
 
 
@@ -209,9 +226,9 @@ namespace EngineCore.Services
             renderer.StartTarget(target);
 
             // render to the target
-            foreach (Entity toRender in renderables)
+            foreach (Entity toRender in renderables[camera.Component.MapID])
             {
-                RotatedRect bounds = toRender.FindComponent<WorldBounds>()!.Bounds;
+                RotatedRect bounds = toRender.FindComponent<MapBounds>()!.Bounds;
                 // This line doesn't work right!
                 if (camera.WorldBounds.Intersects(bounds))
                 {

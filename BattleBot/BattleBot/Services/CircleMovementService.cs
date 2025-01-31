@@ -16,7 +16,7 @@ namespace BattleBot.Services
     {
         public CircleMovementService(Engine e) : base(e)
         {
-            AddRequiredComponent(typeof(WorldBounds));
+            AddRequiredComponent(typeof(MapBounds));
             AddRequiredComponent(typeof(PointRotation));
             PrimaryComponent = typeof(PointRotation);
             Initialize(e);
@@ -27,7 +27,7 @@ namespace BattleBot.Services
             // some updating
             foreach (Entity entity in entities)
             {
-                WorldBounds coords = entity.FindComponent<WorldBounds>();
+                MapBounds coords = entity.FindComponent<MapBounds>();
                 PointRotation pointRotation = entity.FindComponent<PointRotation>();
 
                 // update rotation

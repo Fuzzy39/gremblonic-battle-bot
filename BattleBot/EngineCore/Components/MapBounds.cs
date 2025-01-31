@@ -10,13 +10,14 @@ namespace EngineCore.Components
     /// <summary>
     /// a description of the entities bounds in a game-world.
     /// </summary>
-    public class WorldBounds : Component
+    public class MapBounds : Component
     {
 
         /// <summary>
         /// a description of the entities position in a game-world, in 'tiles'.
         /// </summary>
         required public RotatedRect Bounds { get; set; }
+        required public int MapID { get; set; }
     }
 
 }

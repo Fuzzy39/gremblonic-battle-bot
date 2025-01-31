@@ -45,5 +45,8 @@ namespace EngineCore.Components
         /// What order this camera will be rendered. Higher values are rendered first.
         /// </summary>
         public byte Priority { get; set; }
+
+
+        required public int MapID { get; set; }
     }
 }
