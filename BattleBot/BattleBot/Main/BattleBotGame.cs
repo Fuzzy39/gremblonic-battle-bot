@@ -1,5 +1,5 @@
 ﻿using BattleBot.Components;
-using BattleBot.Systems;
+using BattleBot.Services;
 using EngineCore;
 using EngineCore.Components;
 using EngineCore.Rendering;
@@ -35,8 +35,8 @@ namespace BattleBot.Main
 
             // setup engine systems
             engine = new(GraphicsDevice);
-            new CircleMovementSystem(engine);
-            new CamTestSystem(engine);
+            new CircleMovementService(engine);
+            new CamTestService(engine);
             engine.Initialize();
 
       
@@ -142,7 +142,7 @@ namespace BattleBot.Main
             {
                 for (int y = 0; y < height; y++)
                 {
-                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.TestSquare, (byte)DrawPriority.Background);
+                    e = MakeSimpleEntity(new RectangleF(x - (width / 2f), y - (height / 2f), 1, 1), TextureAsset.Floor, (byte)DrawPriority.Background);
                     e.StopEditing();
                 }
             }

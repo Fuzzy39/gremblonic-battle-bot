@@ -3,9 +3,9 @@
 namespace EngineCore
 {
     /// <summary>
-    /// Defines a system for the game. To be added to the engine and work as expected, the method <see cref="EngineCore.Engine.OnSystemCreated(System)"/> must be called.
+    /// Defines a system for the game. To be added to the engine and work as expected, the method <see cref="EngineCore.Engine.OnSystemCreated(Service)"/> must be called.
     /// </summary>
-    public interface System
+    public interface Service
     {
         /// <summary>
         /// Whether the system is running. When false, the engine will still call <see cref="OnEntityChanged(Entity)"/>

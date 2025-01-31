@@ -15,8 +15,8 @@ namespace EngineCore
     /// </para>
     /// Note: any class extending from BasicSystem should call base.Initialize(Engine); in its constructor.
     /// </summary>
-    /// <seealso cref="EngineCore.System"/>
-    public abstract class BasicSystem : System
+    /// <seealso cref="EngineCore.Service"/>
+    public abstract class BasicService : Service
     {
 
         private bool isRunning;
@@ -70,7 +70,7 @@ namespace EngineCore
 
 
 
-        public BasicSystem(Engine e)
+        public BasicService(Engine e)
         {
             isInitalized = false;
             isRunning = true;

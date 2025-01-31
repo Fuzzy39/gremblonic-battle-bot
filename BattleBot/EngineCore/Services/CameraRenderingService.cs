@@ -1,5 +1,4 @@
-﻿using EngineCore;
-using EngineCore.Components;
+﻿using EngineCore.Components;
 using EngineCore.Rendering;
 using EngineCore.Util;
 using Microsoft.Xna.Framework;
@@ -11,9 +10,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EngineCore.Systems
+namespace EngineCore.Services
 {
-    internal class CameraRenderingSystem : System
+    internal class CameraRenderingService : Service
     {
 
         /// <summary>
@@ -115,7 +114,7 @@ namespace EngineCore.Systems
 
         public bool IsRunning { get; set; }
 
-        public CameraRenderingSystem(Engine e)
+        public CameraRenderingService(Engine e)
         {
             // initalize members
             renderer = e.Renderer;

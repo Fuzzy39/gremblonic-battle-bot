@@ -1,5 +1,4 @@
-﻿using EngineCore;
-using EngineCore.Components;
+﻿using EngineCore.Components;
 using EngineCore.Rendering;
 using Microsoft.Xna.Framework;
 using System;
@@ -8,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EngineCore.Systems
+namespace EngineCore.Services
 {
-    internal class PixelRenderingSystem : BasicSystem
+    internal class PixelRenderingService : BasicService
     {
 
         private readonly Renderer renderer;
 
-        public PixelRenderingSystem(Engine e) : base(e)
+        public PixelRenderingService(Engine e) : base(e)
         {
             renderer = e.Renderer;
             AddRequiredComponent(typeof(PixelBounds));

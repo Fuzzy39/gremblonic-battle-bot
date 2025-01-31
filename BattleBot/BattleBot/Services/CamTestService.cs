@@ -11,11 +11,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Systems
+namespace BattleBot.Services
 {
-    internal class CamTestSystem : EngineCore.BasicSystem
+    internal class CamTestService : BasicService
     {
-        public CamTestSystem(Engine e) : base(e)
+        public CamTestService(Engine e) : base(e)
         {
             AddRequiredComponent(typeof(CamTestComponent));
             AddRequiredComponent(typeof(CameraComponent));
@@ -53,7 +53,7 @@ namespace BattleBot.Systems
                  );
 
                 // Now, what do?
-               
+
 
                 switch (testState.Stage)
                 {
@@ -76,16 +76,16 @@ namespace BattleBot.Systems
         private float getPosInDominantAxis(float amplitude, float basePos, float progress)
         {
             float move = amplitude / 2f;
-            if(progress<=.25f)
+            if (progress <= .25f)
             {
-                return MathHelper.SmoothStep(basePos, basePos+move, progress * 4);
+                return MathHelper.SmoothStep(basePos, basePos + move, progress * 4);
             }
-            if(progress<=.75f)
+            if (progress <= .75f)
             {
-                return MathHelper.SmoothStep(basePos+move, basePos-move, (progress - .25f) * 2f);
+                return MathHelper.SmoothStep(basePos + move, basePos - move, (progress - .25f) * 2f);
             }
 
-            return MathHelper.SmoothStep(basePos-move, basePos, (progress - .75f) * 4f);
+            return MathHelper.SmoothStep(basePos - move, basePos, (progress - .75f) * 4f);
         }
     }
 }

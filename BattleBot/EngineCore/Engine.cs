@@ -1,5 +1,5 @@
 ﻿using EngineCore.Rendering;
-using EngineCore.Systems;
+using EngineCore.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -14,7 +14,7 @@ namespace EngineCore
     {
 
         private readonly BatchRenderer renderer;
-        private readonly List<System> systems;
+        private readonly List<Service> systems;
         private bool isInitialized;
         
 
@@ -26,9 +26,9 @@ namespace EngineCore
             systems = [];
             isInitialized = false;
 
-            new PixelRenderingSystem(this);
-            new CameraRenderingSystem(this);
-            new InputSystem(this);
+            new PixelRenderingService(this);
+            new CameraRenderingService(this);
+            new InputService(this);
 
         }
 
@@ -40,7 +40,7 @@ namespace EngineCore
             }
 
 
-            foreach(System s in systems)
+            foreach(Service s in systems)
             {
                 s.OnEntityChanged(e);
             }
@@ -48,13 +48,13 @@ namespace EngineCore
 
         internal void OnEntityDestroyed(Entity e)
         {
-            foreach(System s in systems)
+            foreach(Service s in systems)
             {
                 s.OnEntityDestroyed(e);
             }
         }
 
-        public void OnSystemCreated(System system)
+        public void OnSystemCreated(Service system)
         {
             if(isInitialized)
             {
@@ -74,7 +74,7 @@ namespace EngineCore
                 throw new InvalidOperationException("Can't update before initialization.");
             }
 
-            foreach (System s in systems)
+            foreach (Service s in systems)
             {
                 s.Update(time);
             }
@@ -90,14 +90,14 @@ namespace EngineCore
             }
 
      
-            foreach(System s in systems)
+            foreach(Service s in systems)
             {
                 s.PreDraw(time);
             }
 
            
             renderer.Begin();
-            foreach (System s in systems)
+            foreach (Service s in systems)
             {
                 s.Draw(time);
             }

@@ -15,7 +15,9 @@ namespace BattleBot.Main
     {
         TestSquare,
         Bot,
-        BackgroundDark
+        BackgroundDark,
+        Wall,
+        Floor
     }
 
     internal class AssetManager
@@ -26,15 +28,20 @@ namespace BattleBot.Main
 
         public AssetManager(ContentManager content)
         {
-            textures = new();
-            textures.Add(TextureAsset.TestSquare, content.Load<Texture2D>("TestSquare"));
-            textures.Add(TextureAsset.Bot, content.Load<Texture2D>("Bot"));
-            textures.Add(TextureAsset.BackgroundDark, content.Load<Texture2D>("BackgroundDark"));
+            textures = new()
+            {
+                { TextureAsset.TestSquare, content.Load<Texture2D>("TestSquare") },
+                { TextureAsset.Bot, content.Load<Texture2D>("Bot") },
+                { TextureAsset.BackgroundDark, content.Load<Texture2D>("BackgroundDark") },
+                { TextureAsset.Wall, content.Load<Texture2D>("Wall") },
+                { TextureAsset.Floor, content.Load<Texture2D>("Floor") }
+            };
+
         }
 
         public Texture2D getTexture(TextureAsset text)
         {
-            return textures[text]; 
+            return textures[text];
         }
     }
 

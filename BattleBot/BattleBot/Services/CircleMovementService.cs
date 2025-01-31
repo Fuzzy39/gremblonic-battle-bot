@@ -10,11 +10,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBot.Systems
+namespace BattleBot.Services
 {
-    internal class CircleMovementSystem : EngineCore.BasicSystem
+    internal class CircleMovementService : BasicService
     {
-        public CircleMovementSystem(Engine e) : base(e)
+        public CircleMovementService(Engine e) : base(e)
         {
             AddRequiredComponent(typeof(WorldBounds));
             AddRequiredComponent(typeof(PointRotation));
@@ -33,18 +33,18 @@ namespace BattleBot.Systems
                 // update rotation
                 float radians = (float)gameTime.ElapsedGameTime.TotalSeconds * pointRotation.rotationalVelcocity;
                 //Console.WriteLine(radians);
-                 pointRotation.theta += radians;
+                pointRotation.theta += radians;
 
                 // update entity coords.
                 Vector2 pos = new Vector2(MathF.Cos(pointRotation.theta), MathF.Sin(pointRotation.theta));
                 pos *= pointRotation.radius;
                 pos += pointRotation.center.ToVector2();
-                pos -= (coords.Bounds.Center - coords.Bounds.BoundingBox.Location);
+                pos -= coords.Bounds.Center - coords.Bounds.BoundingBox.Location;
                 coords.Bounds.SetBoundingBoxLocation(pos);
 
                 coords.Bounds.RotateBy(Angle.FromRadians((float)gameTime.ElapsedGameTime.TotalSeconds * pointRotation.otherRotationVelocity), new(.5f, .5f));
             }
-           
+
         }
     }
 }

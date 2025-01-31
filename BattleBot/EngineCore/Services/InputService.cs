@@ -1,15 +1,14 @@
-﻿using EngineCore;
-using EngineCore.Components;
+﻿using EngineCore.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Linq;
 
-namespace EngineCore.Systems
+namespace EngineCore.Services
 {
-    internal class InputSystem : BasicSystem
+    internal class InputService : BasicService
     {
-        public InputSystem(Engine e) : base(e)
+        public InputService(Engine e) : base(e)
         {
             AddRequiredComponent(typeof(InputComponent));
             Initialize(e);
