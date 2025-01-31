@@ -15,96 +15,9 @@ namespace EngineCore.Services
     internal class CameraRenderingService : Service
     {
 
-        /// <summary>
-        /// Abstracts a Camera Entity.
-        /// </summary>
-        private class Camera
-        {
+        public static readonly EntityType CameraRenderable = e => e.HasComponent<MapBounds>() && e.HasComponent<SimpleTexture>();
+        public static readonly EntityType Chunk = e => e.HasComponent<MapBounds>() && e.HasComponent<ChunkData>();
 
-            private readonly Entity entity;
-
-            public Entity Entity { get { return entity; } }
-
-            public Camera(Entity e)
-            {
-                entity = e;
-                if (!e.HasComponent<CameraComponent>() || !e.HasComponent<PixelBounds>())
-                {
-                    throw new ArgumentException("This Entity " + e.ToString() + " Cannot be used as a camera.");
-                }
-            }
-
-            public static bool IsCameraEntity(Entity e)
-            {
-                return e.HasComponent<CameraComponent>() && e.HasComponent<PixelBounds>();
-
-            }
-
-            public RotatedRect WorldBounds
-            {
-                get
-                {
-                    RotatedRect toReturn = new(
-                        new Vector2(0, 0),
-                        PixelBounds.Size / Component.Scale,
-                        -Component.Rotation,
-                        new(.5f, .5f)
-                    );
-
-                    toReturn.Center = Component.Position;
-
-                    return toReturn;
-                }
-            }
-
-            public CameraComponent Component
-            {
-                get
-                {
-                    return entity.FindComponent<CameraComponent>()!;
-                }
-            }
-
-            public RotatedRect PixelBounds
-            {
-                get
-                {
-                    return entity.FindComponent<PixelBounds>()!.Bounds;
-                }
-
-            }
-
-            public RotatedRect ToPixelBounds(RotatedRect objectBounds)
-            {
-                Vector2 size = objectBounds.Size * Component.Scale;
-                Angle rotation = Component.Rotation + objectBounds.Rotation;
-
-
-                RotatedRect RenderBounds = new(new RectangleF(0, 0, PixelBounds.Width, PixelBounds.Height), Angle.FromRadians(0), new());
-
-                // a glorious transformation. Hopefully it works.
-                Vector2 internalRep = WorldBounds.ToInternalRepresentation(objectBounds.TopLeft);
-
-                Vector2 pos = RenderBounds.FromInternalRepresentation(internalRep);
-
-                // oh god hopefully this doesn't explode.
-                return new(pos, size, rotation, new());
-
-
-            }
-
-
-            public void Render(Renderer renderer, Entity renderable)
-            {
-                // we must convert world bou
-                RotatedRect renderableWorldBounds = renderable.FindComponent<MapBounds>()!.Bounds;
-                RotatedRect spriteBounds = ToPixelBounds(renderableWorldBounds);
-
-                SimpleTexture st = renderable.FindComponent<SimpleTexture>()!;
-                renderer.Draw(st.Texture, spriteBounds, st.Tint, st.Priority);
-            }
-
-        }
 
         private readonly BatchRenderer renderer;
 
@@ -130,7 +43,7 @@ namespace EngineCore.Services
         public void OnEntityChanged(Entity e)
         {
             // camera
-            if (Camera.IsCameraEntity(e))
+            if (e.IsOfType(Camera.EntityType))
             {
                 if (cameras.Any(cam => cam.Entity == e)) return;
 
@@ -155,7 +68,7 @@ namespace EngineCore.Services
             int mapID = e.FindComponent<MapBounds>()!.MapID;
 
             // renderable
-            if (IsRenderable(e))
+            if (e.IsOfType(CameraRenderable) || e.IsOfType(Chunk))
             {
                 if (!renderables.ContainsKey(mapID)) { renderables.Add(mapID, []); }
                 if (!renderables[mapID].Contains(e)) renderables[mapID].Add(e);
@@ -171,7 +84,7 @@ namespace EngineCore.Services
 
         public void OnEntityDestroyed(Entity e)
         {
-            if (Camera.IsCameraEntity(e))
+            if (e.IsOfType(Camera.EntityType))
             {
                 cameras.RemoveAll(cam => cam.Entity == e);
                 return;
@@ -179,12 +92,6 @@ namespace EngineCore.Services
 
             renderables[e.FindComponent<MapBounds>()!.MapID].Remove(e);
         }
-
-        private static bool IsRenderable(Entity e)
-        {
-            return e.HasComponent<MapBounds>() && e.HasComponent<SimpleTexture>();
-        }
-
 
 
         public void Update(GameTime time) { }
@@ -229,10 +136,16 @@ namespace EngineCore.Services
             foreach (Entity toRender in renderables[camera.Component.MapID])
             {
                 RotatedRect bounds = toRender.FindComponent<MapBounds>()!.Bounds;
-                // This line doesn't work right!
+               
                 if (camera.WorldBounds.Intersects(bounds))
                 {
-                    camera.Render(renderer, toRender);
+                    if (toRender.IsOfType(CameraRenderable))
+                    {
+                        camera.Render(renderer, toRender);
+                        continue;
+                    }
+
+                    camera.RenderChunk(renderer, toRender);
                 }
             }
 

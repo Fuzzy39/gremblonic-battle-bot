@@ -12,20 +12,20 @@ using System.Threading.Tasks;
 
 namespace BattleBot.Services
 {
-    internal class CircleMovementService : BasicService
+    internal class CircleMovementService : ServiceBase
     {
+
+        // The Entity Type that this service cares about. More complex services may have seperate distinct types.
+        public static readonly EntityType EntityType = e => e.HasComponent<MapBounds>() && e.HasComponent<PointRotation>();
         public CircleMovementService(Engine e) : base(e)
         {
-            AddRequiredComponent(typeof(MapBounds));
-            AddRequiredComponent(typeof(PointRotation));
-            PrimaryComponent = typeof(PointRotation);
-            Initialize(e);
+            entities.Add(EntityType, []);
         }
 
         public override void Update(GameTime gameTime)
         {
             // some updating
-            foreach (Entity entity in entities)
+            foreach (Entity entity in entities[EntityType])
             {
                 MapBounds coords = entity.FindComponent<MapBounds>();
                 PointRotation pointRotation = entity.FindComponent<PointRotation>();

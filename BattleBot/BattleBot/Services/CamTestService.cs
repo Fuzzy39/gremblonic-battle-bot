@@ -13,21 +13,23 @@ using System.Threading.Tasks;
 
 namespace BattleBot.Services
 {
-    internal class CamTestService : BasicService
+    internal class CamTestService : ServiceBase
     {
+
+        // The Entity Type that this service cares about. More complex services may have seperate distinct types.
+        public static readonly EntityType EntityType = e => e.HasComponent<CamTestComponent>() && e.HasComponent<CameraComponent>();
+
+
         public CamTestService(Engine e) : base(e)
         {
-            AddRequiredComponent(typeof(CamTestComponent));
-            AddRequiredComponent(typeof(CameraComponent));
-            PrimaryComponent = typeof(CamTestComponent);
-            Initialize(e);
+            entities.Add(EntityType, []);
         }
 
 
         public override void Update(GameTime gameTime)
         {
             // some updating
-            foreach (Entity entity in entities)
+            foreach (Entity entity in entities[EntityType])
             {
                 CameraComponent cam = entity.FindComponent<CameraComponent>();
                 CamTestComponent testState = entity.FindComponent<CamTestComponent>();
@@ -58,10 +60,10 @@ namespace BattleBot.Services
                 switch (testState.Stage)
                 {
                     case CamTestComponent.CamTestStage.X:
-                        cam.Position = new(getPosInDominantAxis(testState.Amplitude.X, testState.Base.X, testState.Progress), 0);
+                        cam.Position = new(getPosInDominantAxis(testState.Amplitude.X, testState.Base.X, testState.Progress), testState.Base.Y);
                         break;
                     case CamTestComponent.CamTestStage.Y:
-                        cam.Position = new(0, getPosInDominantAxis(testState.Amplitude.Y, testState.Base.Y, testState.Progress));
+                        cam.Position = new(testState.Base.X, getPosInDominantAxis(testState.Amplitude.Y, testState.Base.Y, testState.Progress));
                         break;
                     case CamTestComponent.CamTestStage.Zoom:
                         cam.Scale = getPosInDominantAxis(testState.Amplitude.Z, testState.Base.Z, testState.Progress);

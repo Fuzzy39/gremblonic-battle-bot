@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace EngineCore
 {
+
+    public delegate bool EntityType(Entity e);
     public sealed class Entity
     {
 
@@ -14,6 +16,10 @@ namespace EngineCore
         private Engine engine;
         private bool isEditing;
 
+        public List<Component> Components
+        {
+            get { return new(components); }
+        }
 
         public Entity(Engine engine)
         {
@@ -73,6 +79,10 @@ namespace EngineCore
             return FindComponent<T>() != null;
         }
 
+        public bool IsOfType(EntityType type)
+        {
+            return type(this);
+        }
 
         internal Component? FindComponent(Type component)
         {
@@ -90,6 +100,7 @@ namespace EngineCore
         {
             return FindComponent(component) != null;
         }
+
 
         public override string ToString()
         {

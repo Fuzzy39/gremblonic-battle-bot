@@ -9,22 +9,24 @@ using System.Threading.Tasks;
 
 namespace EngineCore.Services
 {
-    internal class PixelRenderingService : BasicService
+    internal class PixelRenderingService : ServiceBase
     {
 
+        // The Entity Type that this service cares about. More complex services may have seperate distinct types.
+        public static readonly EntityType EntityType = e => e.HasComponent<PixelBounds>() && e.HasComponent<SimpleTexture>();
+
         private readonly Renderer renderer;
+
 
         public PixelRenderingService(Engine e) : base(e)
         {
             renderer = e.Renderer;
-            AddRequiredComponent(typeof(PixelBounds));
-            AddRequiredComponent(typeof(SimpleTexture));
-            Initialize(e);
+            entities.Add(EntityType, []);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            foreach (Entity entity in entities)
+            foreach (Entity entity in entities[EntityType])
             {
                 PixelBounds coords = entity.FindComponent<PixelBounds>()!;
                 SimpleTexture texture = entity.FindComponent<SimpleTexture>()!;
