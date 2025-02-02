@@ -26,9 +26,10 @@ namespace EngineCore
             systems = [];
             isInitialized = false;
 
+            new InputService(this);
+            new VelocityService(this);
             new PixelRenderingService(this);
             new CameraRenderingService(this);
-            new InputService(this);
 
         }
 

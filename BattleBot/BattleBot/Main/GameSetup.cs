@@ -73,6 +73,10 @@ namespace BattleBot.Main
             SetupTestChunk(new(-1, 0), new(7, 7), true, 1);
             SetupTestChunk(new(0, -1), new(7, 7), true, 1);
             SetupTestChunk(new(0, 1), new(7, 7), true, 1);
+
+            Entity e = MakeSimpleEntity(new RectangleF(-7, 14, 1, 1), TextureAsset.Bot, (byte)DrawPriority.Foreground, 1);
+            e.AddComponent(new Velocity() { Value = new(1f, -1f) });
+            e.StopEditing();
          
         }
 
